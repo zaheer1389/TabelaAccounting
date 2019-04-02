@@ -6,6 +6,8 @@ import java.util.ResourceBundle;
 import com.tabela.accounting.TabelaAccounting;
 import com.tabela.accounting.model.MilkCustomer;
 
+import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -16,9 +18,12 @@ import javafx.scene.control.CheckBox;
 import javafx.scene.control.Hyperlink;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableColumn.CellDataFeatures;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.VBox;
+import javafx.util.Callback;
 
 public class MilkCustomerController implements Initializable {
 
@@ -41,25 +46,25 @@ public class MilkCustomerController implements Initializable {
 	private TableView<MilkCustomer> customerTable;
 
 	@FXML
-	private TableColumn<?, ?> colCustomerName;
+	private TableColumn colCustomerName;
 
 	@FXML
-	private TableColumn<?, ?> colCreatedDate;
+	private TableColumn colCreatedDate;
 
 	@FXML
-	private TableColumn<?, ?> colCustomerAddress;
+	private TableColumn colCustomerAddress;
 
 	@FXML
-	private TableColumn<?, ?> colMilkRate;
+	private TableColumn colMilkRate;
 
 	@FXML
-	private TableColumn<?, ?> colPendingBill;
+	private TableColumn colPendingBill;
 
 	@FXML
-	private TableColumn<?, ?> colActive;
+	private TableColumn colActive;
 
 	@FXML
-	private TableColumn<?, ?> btnEdit;
+	private TableColumn btnEdit;
 
 	@Override
 	public void initialize(URL url, ResourceBundle rb) {
@@ -82,45 +87,42 @@ public class MilkCustomerController implements Initializable {
 
 	}
 
-	private class ActiveStatus extends TableCell<MilkCustomer, Boolean> {
-		final CheckBox cb = new CheckBox();
+	public void setTable() {
+		colCustomerName.setCellValueFactory(new PropertyValueFactory("customerName"));
+		colCreatedDate.setCellValueFactory(new PropertyValueFactory("strJoinDate"));
+		colCustomerAddress.setCellValueFactory(new PropertyValueFactory("customerAddress"));
+		colMilkRate.setCellValueFactory(new PropertyValueFactory("milkRate"));
+		colPendingBill.setCellValueFactory(new PropertyValueFactory("billAmount"));
+		
+        Callback<TableColumn<MilkCustomer, Void>, TableCell<MilkCustomer, Void>> cellFactory = new Callback<TableColumn<MilkCustomer, Void>, TableCell<MilkCustomer, Void>>() {
+            @Override
+            public TableCell<MilkCustomer, Void> call(final TableColumn<MilkCustomer, Void> param) {
+                final TableCell<MilkCustomer, Void> cell = new TableCell<MilkCustomer, Void>() {
 
-		public ActiveStatus() {
-			this.cb.setOnAction(new EventHandler<ActionEvent>() {
-				public void handle(ActionEvent arg0) {
-					
-				}
-			});
-		}
+                    private final CheckBox cb = new CheckBox();
+                    {
+                    	cb.setOnAction((ActionEvent event) -> {
+                        	MilkCustomer data = getTableView().getItems().get(getIndex());
+                            System.out.println("selectedData: " + data);
+                        });
+                    }
 
-		protected void updateItem(Boolean t, boolean empty) {
-			super.updateItem(t, empty);
-			if (!empty) {
-				
-			}
-		}
+                    @Override
+                    public void updateItem(Void item, boolean empty) {
+                        super.updateItem(item, empty);
+                        if (empty) {
+                            setGraphic(null);
+                        } else {
+                            setGraphic(cb);
+                        }
+                    }
+                };
+                return cell;
+            }
+        };
+
+        colActive.setCellFactory(cellFactory);
 	}
 
-	private class EditButton extends TableCell<MilkCustomer, Boolean> {
-		final Hyperlink cellButton = new Hyperlink();
-
-		EditButton() {
-			this.cellButton.setPrefWidth(100.0D);
-			this.cellButton.setPrefHeight(22.0D);
-			this.cellButton.getStyleClass().add("btnEdit");
-			this.cellButton.setOnAction(new EventHandler<ActionEvent>() {
-				public void handle(ActionEvent arg0) {
-					
-				}
-			});
-		}
-
-		protected void updateItem(Boolean t, boolean empty) {
-			super.updateItem(t, empty);
-			if (!empty) {
-				setGraphic(this.cellButton);
-			}
-		}
-	}
 
 }
