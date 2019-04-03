@@ -8,6 +8,8 @@ import java.util.Properties;
 
 import javax.persistence.EntityManager;
 
+import com.tabela.accounting.model.Branch;
+import com.tabela.accounting.persistence.FacadeFactory;
 import com.tabela.accounting.persistence.JPAFacade;
 import com.tabela.accounting.util.DialogFactory;
 
@@ -26,11 +28,20 @@ public class TabelaAccounting extends Application {
 
 	@Override
 	public void start(Stage stage) throws Exception {
+		
 		TabelaAccounting.stage = stage;
+		
 		System.err.println(getProperties());
+		
 		EntityManager em = JPAFacade.getEntityManager();
+		setData();
+		
 		Parent root = FXMLLoader.load(getClass().getResource("/fxml/Main.fxml"));
+		root.getStyleClass().add("panel-primary");
+		
 		Scene scene = new Scene(root);
+		scene.getStylesheets().add("org/kordamp/bootstrapfx/bootstrapfx.css");
+		scene.getStylesheets().add("themes/style.css");
 		stage.setScene(scene);
 		stage.initStyle(StageStyle.UNIFIED);
 		stage.setTitle("Tabela Accounting");
@@ -70,6 +81,16 @@ public class TabelaAccounting extends Application {
 		PrintWriter pw = new PrintWriter(sw);
 		e.printStackTrace(pw);
 		return sw.toString();
+	}
+	
+	public void setData(){
+		Branch branch = FacadeFactory.getFacade().find(Branch.class, 1L);
+		if(branch == null){
+			branch = new Branch();
+			branch.setId(1L);
+			branch.setName("Aarey Tabela");
+			FacadeFactory.getFacade().store(branch);
+		}
 	}
 
 }
