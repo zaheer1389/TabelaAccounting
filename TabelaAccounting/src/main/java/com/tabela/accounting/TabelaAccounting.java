@@ -46,6 +46,7 @@ public class TabelaAccounting extends Application {
 		stage.initStyle(StageStyle.UNIFIED);
 		stage.setTitle("Tabela Accounting");
 		stage.show();
+
 	}
 
 	/**
@@ -91,6 +92,10 @@ public class TabelaAccounting extends Application {
 			branch.setName("Aarey Tabela");
 			FacadeFactory.getFacade().store(branch);
 		}
+	}
+	
+	public static Branch getBranch(){
+		return FacadeFactory.getFacade().find(Branch.class, 1L);
 	}
 
 }

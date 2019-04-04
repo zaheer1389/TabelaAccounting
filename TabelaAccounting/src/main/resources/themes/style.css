@@ -23,3 +23,23 @@
 .table-row-cell {
     -fx-cell-size: 25px;
 }
+
+
+/******************************************** Dialogs *********************************************/
+
+#textArea,.cell-textarea {
+-fx-background-color: rgba(0, 0, 0, 0.0);
+-fx-font-size: 13;
+}
+#textArea .scroll-pane , .cell-textarea .scroll-pane{
+-fx-background-color: transparent;
+}
+#textArea .scroll-pane .viewport, .cell-textarea .scroll-pane .viewport {
+-fx-background-color: transparent;
+}
+#textArea .scroll-pane .content, .cell-textarea .scroll-pane .content {
+-fx-background-color: transparent;
+}
+#textArea *.text, .cell-textarea *.text {
+-fx-text-alignment: left;
+}

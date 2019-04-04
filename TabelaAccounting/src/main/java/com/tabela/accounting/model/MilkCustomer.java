@@ -47,7 +47,7 @@ public class MilkCustomer extends AbstractPojo implements Serializable {
 	private Long milkRateId;
 	
 	@Column(name = "MilkRate")
-	private Double milkRate;
+	private double milkRate;
 	
 	@Transient
 	private double billAmt;
@@ -139,11 +139,11 @@ public class MilkCustomer extends AbstractPojo implements Serializable {
 		this.milkRateId = milkRateId;
 	}
 
-	public Double getMilkRate() {
+	public double getMilkRate() {
 		return this.milkRate;
 	}
 
-	public void setMilkRate(Double milkRate) {
+	public void setMilkRate(double milkRate) {
 		this.milkRate = milkRate;
 	}
 

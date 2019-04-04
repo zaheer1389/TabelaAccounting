@@ -50,6 +50,7 @@ public class FXOptionPane {
 	static class Message extends TextArea {
 		public Message(String msg) {
 			super();
+			setText(msg);
 			setWrapText(true);
 			setPadding(new Insets(10.0D, 0.0D, 0.0D, 0.0D));
 			setId("textArea");
