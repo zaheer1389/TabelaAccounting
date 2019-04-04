@@ -26,6 +26,12 @@
             <Menu fx:id="menuMilk" mnemonicParsing="false" text="Milk">
               <items>
                 <MenuItem fx:id="menuMilk_MenuItemCustomers" mnemonicParsing="false" onAction="#showMilkCustomersView" text="Customers" />
+                  <Menu fx:id="menuMilk_MenuIMilk" mnemonicParsing="false" text="Customer Milk">
+                    <items>
+                      <MenuItem fx:id="menuMilk_MenuItemMilkSheet" mnemonicParsing="false" onAction="#milkSheet" text="Sheet" />
+                        <MenuItem fx:id="menuMilk_MenuItemMilkForm" mnemonicParsing="false" onAction="#milkForm" text="Form" />
+                    </items>
+                  </Menu>
               </items>
             </Menu>
         <Menu fx:id="menuHelp" mnemonicParsing="false" text="Help">

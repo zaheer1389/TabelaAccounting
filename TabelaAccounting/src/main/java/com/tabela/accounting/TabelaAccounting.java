@@ -48,6 +48,10 @@ public class TabelaAccounting extends Application {
 		stage.show();
 
 	}
+	
+	public static Stage getPrimaryStage(){
+		return stage;
+	}
 
 	/**
 	 * @param args

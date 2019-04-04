@@ -43,3 +43,23 @@
 #textArea *.text, .cell-textarea *.text {
 -fx-text-alignment: left;
 }
+
+/************************************Spreadsheet*****************************************/
+
+
+.spreadsheet-cell.date-cell{
+	-fx-background-color: #197de1;
+	-fx-text-color: #FFFFFF;
+	 -fx-alignment: center;
+	 -fx-pref-width: 60px;
+}
+
+.spreadsheet-cell.value-cell{
+	-fx-pref-width: 70px;
+	-fx-min-width: 70px;
+}
+
+.spreadsheet-cell.empty-cell{
+	-fx-pref-width: 0px;
+	-fx-min-width: 0px;
+}

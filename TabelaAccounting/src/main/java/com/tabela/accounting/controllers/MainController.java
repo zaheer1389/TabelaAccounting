@@ -6,6 +6,7 @@ import java.util.Date;
 import java.util.ResourceBundle;
 
 import com.tabela.accounting.TabelaAccounting;
+import com.tabela.accounting.view.MilkSpreadSheet;
 
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -47,13 +48,22 @@ public class MainController implements Initializable {
     private MenuItem menuMilk_MenuItemCustomers;
 
     @FXML
+    private Menu menuMilk_MenuIMilk;
+
+    @FXML
+    private MenuItem menuMilk_MenuItemMilkSheet;
+
+    @FXML
+    private MenuItem menuMilk_MenuItemMilkForm;
+
+    @FXML
     private Menu menuHelp;
 
     @FXML
-    private Label lblDate;
-    
-    @FXML
     private Label lblPageTitle;
+
+    @FXML
+    private Label lblDate;
 
     @FXML
     private VBox content;
@@ -89,6 +99,24 @@ public class MainController implements Initializable {
 			content.getChildren().clear();
 			content.getChildren().add(root);
 		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+    }
+    
+    @FXML
+    void milkForm(ActionEvent event) {
+
+    }
+
+    @FXML
+    void milkSheet(ActionEvent event) {
+    	lblPageTitle.setText("Milk");
+    	MilkSpreadSheet sheet = new MilkSpreadSheet();
+    	try {
+			content.getChildren().clear();
+			content.getChildren().add(sheet);
+		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
