@@ -36,4 +36,14 @@ public abstract interface IFacade {
 			String paramString2, Map<String, Object> paramMap);
 
 	public abstract Long count(String paramString, Map<String, Object> paramMap);
+	
+	/**
+     * Update all the fields in the entity to the most up-to-date version of
+     * data found in the database. Any changes made to the entity object before
+     * calling this method will be overwritten.
+     * 
+     * @param pojo
+     *            The entity object you wish to refresh
+     */
+    public <A extends AbstractPojo> void refresh(A pojo);
 }

@@ -1,10 +1,8 @@
 package com.tabela.accounting.persistence;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.io.Serializable;
+import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
@@ -16,6 +14,7 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.NoResultException;
 import javax.persistence.Persistence;
 import javax.persistence.Query;
+import javax.persistence.Transient;
 
 import org.eclipse.persistence.expressions.ExpressionBuilder;
 import org.eclipse.persistence.jpa.JpaEntityManager;
@@ -256,4 +255,90 @@ public class JPAFacade implements IFacade, Serializable {
 		}
 		return (Long) list.get(0);
 	}
+	
+	/**
+     * {@inheritDoc}
+     */
+    @SuppressWarnings("unchecked")
+    public <A extends AbstractPojo> void refresh(A pojo) {
+        // A boolean which defines if we should close the EntityManager after
+        // the refresh is done.
+        boolean closeEm = false;
+
+        // If this method is called independently, in other words, not from
+        // within this facade, then we should close the entity manager after the
+        // refresh is done. However, if it is called from within this facade,
+        // then we should have and open entity manager and the calling method
+        // will take care of closing the em.
+        //if (em.get() == null || !em.get().isOpen()) {
+        //    closeEm = true;
+       // }
+        // Get the EntityManager
+        EntityManager em = getEntityManager();
+
+        // Get a fresh instance of the object.
+        A pojo2 = (A) em.find(pojo.getClass(), pojo.getId());
+        // Make sure its state is up-to-date
+        em.refresh(pojo2);
+
+        // Now copy all fields' values from pojo2 back to pojo
+        copyFieldsRecursively(pojo, pojo2, pojo.getClass());
+
+        // Close the em if necessary
+        if (closeEm) {
+            em.close();
+        }
+    }
+
+
+    /**
+     * Copies all field values recursively from pojo2 to pojo
+     * 
+     * @param pojo
+     *            The object to which we are copying
+     * @param pojo2
+     *            The object from which we are copying
+     * @param c
+     *            The class we are currently processing
+     */
+    private <A extends AbstractPojo> void copyFieldsRecursively(A pojo,
+            A pojo2, Class<?> c) {
+        // if class is null, then there is nothing left to copy
+        if (c != null) {
+            // Get all the fields in this class. NOTE! getDeclaredFields() will
+            // return all fields whether they are private or not. However,
+            // getDeclaredFields() will only return the fields defined in
+            // Class<?> c, and not the fields in its superclass(es). Hence, we
+            // need to perform this method recursively to be able to get the
+            // superclasses' field values too.
+            Field[] fields = c.getDeclaredFields();
+
+            // Loop through all fields
+            for (Field field : fields) {
+                // If the field is transient, static or final, then we do not
+                // want to copy its value
+                if (!field.isAnnotationPresent(Transient.class)
+                        && !Modifier.isStatic(field.getModifiers())
+                        && !Modifier.isFinal(field.getModifiers())) {
+
+                    // The field might be inaccessible, so let's force it to be
+                    // accessible.
+                    field.setAccessible(true);
+                    try {
+                        // Copy the value from pojo2 to pojo
+                        field.set(pojo, field.get(pojo2));
+                    } catch (IllegalArgumentException e) {
+                        // TODO Auto-generated catch block
+                        e.printStackTrace();
+                    } catch (IllegalAccessException e) {
+                        // TODO Auto-generated catch block
+                        e.printStackTrace();
+                    }
+                }
+            }
+            // Now perform the same copying of fields to this class's
+            // superclass.
+            copyFieldsRecursively(pojo, pojo2, c.getSuperclass());
+        }
+    }
 }
