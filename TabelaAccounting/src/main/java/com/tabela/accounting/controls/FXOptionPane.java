@@ -167,6 +167,7 @@ public class FXOptionPane {
 
 		HBox msg = new HBox();
 		msg.setSpacing(5.0D);
+		msg.setFillHeight(true);
 		msg.getChildren().addAll(new Node[] { icon, message });
 		vb.getChildren().addAll(new Node[] { msg, buttons });
 
@@ -179,7 +180,7 @@ public class FXOptionPane {
 		};
 		vb.setOnKeyPressed(handler);
 		vb.requestFocus();
-
+		dial.initModality(Modality.WINDOW_MODAL);
 		dial.setResizable(true);
 		dial.showDialog();
 	}

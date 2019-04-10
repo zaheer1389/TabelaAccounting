@@ -1,5 +1,6 @@
 package com.tabela.accounting.controllers;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.time.LocalDate;
@@ -16,6 +17,7 @@ import com.tabela.accounting.util.DialogFactory;
 import com.tabela.accounting.view.MilkSpreadSheet;
 import com.tabela.accounting.view.ReportLayout;
 
+import javafx.application.HostServices;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -34,7 +36,6 @@ import javafx.scene.control.SelectionMode;
 import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import javafx.util.Callback;
 
 public class MainController implements Initializable {
 
@@ -97,6 +98,16 @@ public class MainController implements Initializable {
     private VBox content;
     
     Stage window;
+    
+    private HostServices hostServices ;
+
+    public HostServices getHostServices() {
+        return hostServices ;
+    }
+
+    public void setHostServices(HostServices hostServices) {
+        this.hostServices = hostServices ;
+    }
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -184,8 +195,11 @@ public class MainController implements Initializable {
 			public void handle(ActionEvent arg0) {
 				try {
 					List<MilkCustomer> customers = listView.getSelectionModel().getSelectedItems();
-					new ReportGenerator().generate(customers, AppUtil.toUtilDate((LocalDate) root.getFromDate().getValue()),
+					File report = new ReportGenerator().generate(customers, AppUtil.toUtilDate((LocalDate) root.getFromDate().getValue()),
 							AppUtil.toUtilDate((LocalDate) root.getToDate().getValue()));
+					if(report != null){
+						hostServices.showDocument(report.getAbsolutePath());
+					}
 				} catch (Exception e) {
 					DialogFactory.showExceptionDialog(e, null);
 				}

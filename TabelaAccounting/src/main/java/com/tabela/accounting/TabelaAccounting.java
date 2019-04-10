@@ -8,6 +8,7 @@ import java.util.Properties;
 
 import javax.persistence.EntityManager;
 
+import com.tabela.accounting.controllers.MainController;
 import com.tabela.accounting.model.Branch;
 import com.tabela.accounting.persistence.FacadeFactory;
 import com.tabela.accounting.persistence.JPAFacade;
@@ -36,9 +37,13 @@ public class TabelaAccounting extends Application {
 		EntityManager em = JPAFacade.getEntityManager();
 		setData();
 		
-		Parent root = FXMLLoader.load(getClass().getResource("/fxml/Main.fxml"));
+		FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Main.fxml"));
+		Parent root = loader.load();
 		root.getStyleClass().add("panel-primary");
 		
+		MainController controller = loader.getController();
+	    controller.setHostServices(getHostServices());
+	    
 		Scene scene = new Scene(root);
 		scene.getStylesheets().add("org/kordamp/bootstrapfx/bootstrapfx.css");
 		scene.getStylesheets().add("themes/style.css");

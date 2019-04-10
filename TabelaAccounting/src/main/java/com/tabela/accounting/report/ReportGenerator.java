@@ -1,5 +1,6 @@
 package com.tabela.accounting.report;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.text.SimpleDateFormat;
@@ -40,7 +41,7 @@ public class ReportGenerator {
 	Date fromDate;
 	Date toDate;
 	
-	public void generate(List<MilkCustomer> customers, Date fromDate, Date toDate) {
+	public File generate(List<MilkCustomer> customers, Date fromDate, Date toDate) {
 
 		this.customers = customers;
 		this.fromDate = fromDate;
@@ -49,27 +50,34 @@ public class ReportGenerator {
 		document = new Document();
 		try {
 			document.setMargins(15, 15, 10, 15);
-			PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream("/home/zaheer/HelloWorld.pdf"));
+			PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream(System.getProperty("user.home")+"/MilkInvoices.pdf"));
 			document.open();
 			int count = 1;
 			for(MilkCustomer customer : customers){
-				process(customer);
-				if(count % 2 == 0){
-					document.newPage();
+				List<CustomerMilk> milks = getMilks(customer);
+				if(milks != null && milks.size() > 0){
+					process(customer, milks);
+					if(count % 2 == 0){
+						document.newPage();
+					}
+					count++;
 				}
-				count++;
 			}
 			document.close();
 			writer.close();
+			
+			return new File(System.getProperty("user.home")+"/MilkInvoices.pdf");
 		} catch (DocumentException e) {
 			e.printStackTrace();
+			return null;
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
+			return null;
 		}
 
 	}
 	
-	public void process(MilkCustomer customer){
+	public void process(MilkCustomer customer, List<CustomerMilk> milks){
 		Paragraph preface = new Paragraph("Milk Invoice", headerFont); 
 		preface.setAlignment(Element.ALIGN_CENTER);
 		try {
@@ -107,10 +115,10 @@ public class ReportGenerator {
 			
 			double totalMilk = 0;
 			double totalMilkPrice = 0;
-			List<CustomerMilk> milks = getMilks(customer);
+			
 			for(CustomerMilk milk : milks){
-				table.addCell(getHeaderCell(" "+new SimpleDateFormat("dd-MMM-yyyy").format(milk.getMilkDate()), PdfPCell.ALIGN_LEFT, false));
-				table.addCell(getHeaderCell(" "+milk.getMilkRate()+"", PdfPCell.ALIGN_LEFT, false));
+				table.addCell(getHeaderCell("  "+new SimpleDateFormat("dd-MMM-yyyy").format(milk.getMilkDate()), PdfPCell.ALIGN_LEFT, false));
+				table.addCell(getHeaderCell("  "+milk.getMilkRate()+"", PdfPCell.ALIGN_LEFT, false));
 				table.addCell(getHeaderCell(milk.getMorningMilk()+"", PdfPCell.ALIGN_CENTER, false));
 				table.addCell(getHeaderCell(milk.getEveningMilk()+"", PdfPCell.ALIGN_CENTER, false));
 				double dayTotal = (milk.getMorningMilk()+milk.getEveningMilk());
@@ -190,7 +198,8 @@ public class ReportGenerator {
 		EntityManager em = JPAFacade.getEntityManager();
 		Query query = em.createNativeQuery(queryStr);
 		List list = query.getResultList();
-		return list != null && list.size() > 0 ? Double.parseDouble(list.get(0).toString()) : 0;
+		Object value = list != null && list.size() > 0 ? list.get(0) : 0;
+		return value != null ? Double.parseDouble(value+"") : 0;
 	}
 	
 	public double getPrevPaymentReceivedTillDate(MilkCustomer customer){
@@ -201,7 +210,8 @@ public class ReportGenerator {
 		EntityManager em = JPAFacade.getEntityManager();
 		Query query = em.createNativeQuery(queryStr);
 		List list = query.getResultList();
-		return list != null && list.size() > 0 ? Double.parseDouble(list.get(0).toString()) : 0;
+		Object value = list != null && list.size() > 0 ? list.get(0) : 0;
+		return value != null ? Double.parseDouble(value+"") : 0;
 	}
 	
 }
