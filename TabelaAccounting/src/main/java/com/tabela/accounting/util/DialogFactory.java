@@ -7,15 +7,15 @@ import javafx.stage.Stage;
 
 public class DialogFactory {
 	public static void showInformationDialog(String message, Stage stage) {
-		FXOptionPane.showInformationDialog(null, message, "Tabelas");
+		FXOptionPane.showInformationDialog(null, message, "Tabela Accounting");
 	}
 
 	public static void showWarningDialog(String message, Stage stage) {
-		FXOptionPane.showInformationDialog(stage, message, "Tabelas");
+		FXOptionPane.showInformationDialog(stage, message, "Tabela Accounting");
 	}
 
 	public static void showErrorDialog(String message, Stage stage) {
-		FXOptionPane.showErrorDialog(stage, message, "Tabelas");
+		FXOptionPane.showErrorDialog(stage, message, "Tabela Accounting");
 	}
 
 	public static FXOptionPane.Response showConfirmationDialog(String message, DialogType dialogType, Stage stage) {

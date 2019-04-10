@@ -95,8 +95,8 @@ public class FXOptionPane {
 
 		Button okButton = new Button("OK");
 		okButton.setAlignment(Pos.CENTER);
-		okButton.setPadding(new Insets(0.0D, 20.0D, 0.0D, 0.0D));
-		okButton.setPrefHeight(25.0D);
+		//okButton.setPadding(new Insets(0.0D, 20.0D, 0.0D, 0.0D));
+		//okButton.setPrefHeight(25.0D);
 		okButton.setOnAction(new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent e) {
 				dial.close();
@@ -150,8 +150,8 @@ public class FXOptionPane {
 
 		Button okButton = new Button("OK");
 		okButton.setAlignment(Pos.CENTER);
-		okButton.setPadding(new Insets(0.0D, 20.0D, 0.0D, 0.0D));
-		okButton.setPrefHeight(25.0D);
+		//okButton.setPadding(new Insets(0.0D, 20.0D, 0.0D, 0.0D));
+		//okButton.setPrefHeight(25.0D);
 		okButton.setOnAction(new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent e) {
 				dial.close();

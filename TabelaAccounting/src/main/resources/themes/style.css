@@ -1,8 +1,9 @@
 .btnComplete {
 	-fx-background-image: url("../images/complete.png");
 	-fx-background-repeat: no-repeat;
-	-fx-background-position: 15px 1px;
-	-fx-background-size: 23px 23px;
+	-fx-background-position: 15px 0px;
+	-fx-background-size: 18px 15px;
+	-fx-cursor: hand;
 }
 
 .btnEdit {
@@ -16,8 +17,9 @@
 .btnDelete {
 	-fx-background-image: url("../images/delete.png");
 	-fx-background-repeat: no-repeat;
-	-fx-background-position: 15px 1px;
-	-fx-background-size: 18px 18px;
+	-fx-background-position: 15px 0px;
+	-fx-background-size: 18px 15px;
+	-fx-cursor: hand;
 }
 
 .table-row-cell {

@@ -32,11 +32,18 @@
                         <MenuItem fx:id="menuMilk_MenuItemMilkForm" mnemonicParsing="false" onAction="#milkForm" text="Form" />
                     </items>
                   </Menu>
+                  <MenuItem fx:id="menuMilk_MenuItemPayment" mnemonicParsing="false" onAction="#milkPayment" text="Payment" />
+                  <Menu fx:id="menuMilk_MenuPrintBill" mnemonicParsing="false" text="Print Bill">
+                    <items>
+                      <MenuItem fx:id="menuMilk_MenuItemPrintBillCustomerWise" mnemonicParsing="false" onAction="#printCustomerWiseBill" text="Customer Wise" />
+                        <MenuItem fx:id="menuMilk_MenuItemPrintBillAllCustomer" mnemonicParsing="false" onAction="#printAllCustomerBill" text="All Customer" />
+                    </items>
+                  </Menu>
               </items>
             </Menu>
         <Menu fx:id="menuHelp" mnemonicParsing="false" text="Help">
           <items>
-            <MenuItem mnemonicParsing="false" text="About MyHelloApp" />
+            <MenuItem mnemonicParsing="false" text="About Tabela Accounting" />
           </items>
         </Menu>
       </menus>

@@ -7,6 +7,7 @@
     <class>com.tabela.accounting.model.Branch</class>
     <class>com.tabela.accounting.model.MilkCustomer</class>
     <class>com.tabela.accounting.model.CustomerMilk</class>
+    <class>com.tabela.accounting.model.MilkPayment</class>
     
     <properties>
       <!-- <property name="javax.persistence.jdbc.driver" value="com.mysql.jdbc.Driver" />

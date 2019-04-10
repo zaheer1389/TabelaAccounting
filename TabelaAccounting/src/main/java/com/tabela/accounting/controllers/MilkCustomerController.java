@@ -214,6 +214,8 @@ public class MilkCustomerController implements Initializable {
 	        stage.initOwner(TabelaAccounting.stage);
 	        stage.setResizable(false);
 	        stage.setScene(scene);
+	        //stage.setX(150);
+	        //stage.setY(150);
 	        stage.show();
 	       
 	        controller.setStage(stage);
