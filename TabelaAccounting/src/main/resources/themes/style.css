@@ -22,6 +22,14 @@
 	-fx-cursor: hand;
 }
 
+.btnView {
+	-fx-background-image: url("../images/view.png");
+	-fx-background-repeat: no-repeat;
+	-fx-background-position: 15px 0px;
+	-fx-background-size: 18px 15px;
+	-fx-cursor: hand;
+}
+
 .table-row-cell {
     -fx-cell-size: 25px;
 }

@@ -15,7 +15,7 @@ import com.tabela.accounting.report.ReportGenerator;
 import com.tabela.accounting.util.AppUtil;
 import com.tabela.accounting.util.DialogFactory;
 import com.tabela.accounting.view.MilkSpreadSheet;
-import com.tabela.accounting.view.ReportLayout;
+import com.tabela.accounting.view.MilkInvoiceLayout;
 
 import javafx.application.HostServices;
 import javafx.collections.FXCollections;
@@ -84,6 +84,15 @@ public class MainController implements Initializable {
 
     @FXML
     private MenuItem menuMilk_MenuItemPrintBillAllCustomer;
+    
+    @FXML
+    private Menu menuExpense;
+
+    @FXML
+    private MenuItem menuExpense_menuItemExpenses;
+
+    @FXML
+    private MenuItem menuExpense_menuItemExpenseReport;
 
     @FXML
     private Menu menuHelp;
@@ -186,7 +195,7 @@ public class MainController implements Initializable {
     
     @FXML
     void printAllCustomerBill(ActionEvent event) {
-		ReportLayout root = new ReportLayout();
+		MilkInvoiceLayout root = new MilkInvoiceLayout();
 
 		final ListView<MilkCustomer> listView = getMilkCustomerListView();
 		root.getChildren().add(2, listView);
@@ -214,14 +223,44 @@ public class MainController implements Initializable {
 		Scene scene = new Scene(root, 400.0D, 400.0D);
 		stage.setScene(scene);
 
-		stage.setX(100.0D);
-		stage.setY(100.0D);
+		//stage.setX(100.0D);
+		//stage.setY(100.0D);
 		stage.show();
     }
 
     @FXML
     void printCustomerWiseBill(ActionEvent event) {
+    	MilkInvoiceLayout root = new MilkInvoiceLayout();
 
+		final ListView<MilkCustomer> listView = getMilkCustomerListView();
+		root.getChildren().add(2, listView);
+
+		root.getBtnReport().setOnAction(new EventHandler<ActionEvent>() {
+			public void handle(ActionEvent arg0) {
+				try {
+					List<MilkCustomer> customers = listView.getSelectionModel().getSelectedItems();
+					File report = new ReportGenerator().generate(customers, AppUtil.toUtilDate((LocalDate) root.getFromDate().getValue()),
+							AppUtil.toUtilDate((LocalDate) root.getToDate().getValue()));
+					if(report != null){
+						hostServices.showDocument(report.getAbsolutePath());
+					}
+				} catch (Exception e) {
+					DialogFactory.showExceptionDialog(e, null);
+				}
+			}
+		});
+		Stage stage = new Stage();
+		stage.setTitle("Print Bill");
+		stage.setResizable(false);
+		stage.initModality(Modality.WINDOW_MODAL);
+		stage.initOwner(TabelaAccounting.getPrimaryStage());
+
+		Scene scene = new Scene(root, 400.0D, 400.0D);
+		stage.setScene(scene);
+
+		//stage.setX(100.0D);
+		//stage.setY(100.0D);
+		stage.show();
     }
     
 	public ListView<MilkCustomer> getMilkCustomerListView() {
@@ -243,5 +282,24 @@ public class MainController implements Initializable {
 		});
 		return listView;
 	}
+	
+	@FXML
+    void expense(ActionEvent event) {
+		lblPageTitle.setText("Expenses");
+    	
+    	try {
+			Parent root = FXMLLoader.load(getClass().getResource("/fxml/ExpenseView.fxml"));
+			content.getChildren().clear();
+			content.getChildren().add(root);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+    }
+
+    @FXML
+    void expenseReport(ActionEvent event) {
+
+    }
    
 }

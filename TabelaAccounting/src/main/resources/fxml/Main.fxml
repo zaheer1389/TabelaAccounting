@@ -41,6 +41,12 @@
                   </Menu>
               </items>
             </Menu>
+            <Menu fx:id="menuExpense" mnemonicParsing="false" text="Expense">
+              <items>
+                <MenuItem fx:id="menuExpense_menuItemExpenses" mnemonicParsing="false" onAction="#expense" text="Expenses" />
+                  <MenuItem fx:id="menuExpense_menuItemExpenseReport" mnemonicParsing="false" onAction="#expenseReport" text="Report" />
+              </items>
+            </Menu>
         <Menu fx:id="menuHelp" mnemonicParsing="false" text="Help">
           <items>
             <MenuItem mnemonicParsing="false" text="About Tabela Accounting" />

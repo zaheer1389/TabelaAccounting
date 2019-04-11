@@ -20,6 +20,7 @@ import com.itextpdf.text.Font;
 import com.itextpdf.text.FontFactory;
 import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.Phrase;
+import com.itextpdf.text.Rectangle;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
@@ -97,15 +98,17 @@ public class ReportGenerator {
 			table.addCell(getCell("Address : "+customer.getCustomerAddress(), PdfPCell.ALIGN_LEFT));
 			document.add(table);
 			
-			table = new PdfPTable(5);
+			table = new PdfPTable(6);
 			table.setSpacingBefore(10);
 			table.setSpacingAfter(11);
 			table.setWidthPercentage(100);
-			table.addCell(getHeaderCell("  Milk Date", PdfPCell.ALIGN_LEFT, true));
-			table.addCell(getHeaderCell("  Milk Rate", PdfPCell.ALIGN_LEFT, true));
-			table.addCell(getHeaderCell("Morning", PdfPCell.ALIGN_CENTER, true));
-			table.addCell(getHeaderCell("Evening", PdfPCell.ALIGN_CENTER, true));
-			table.addCell(getHeaderCell("Total", PdfPCell.ALIGN_CENTER, true));
+			
+			table.addCell(getHeaderCell("  Milk Date", PdfPCell.ALIGN_LEFT, true, 0));
+			table.addCell(getHeaderCell("  Milk Rate", PdfPCell.ALIGN_LEFT, true, 0));
+			table.addCell(getHeaderCell("Morning Milk(ltrs)", PdfPCell.ALIGN_CENTER, true, 0));
+			table.addCell(getHeaderCell("Evening Milk(ltrs)", PdfPCell.ALIGN_CENTER, true, 0));
+			table.addCell(getHeaderCell("Total Milk(ltrs)", PdfPCell.ALIGN_CENTER, true, 0));
+			table.addCell(getHeaderCell("Amount", PdfPCell.ALIGN_CENTER, true, 0));
 			
 			double prevMilkSell = getPrevMilkSellTillDate(customer);
 			System.out.println("Prev milk sell "+prevMilkSell);
@@ -115,17 +118,33 @@ public class ReportGenerator {
 			
 			double totalMilk = 0;
 			double totalMilkPrice = 0;
-			
+			double totalMorningMilk = 0;
+			double totalEveningMilk = 0;
 			for(CustomerMilk milk : milks){
-				table.addCell(getHeaderCell("  "+new SimpleDateFormat("dd-MMM-yyyy").format(milk.getMilkDate()), PdfPCell.ALIGN_LEFT, false));
-				table.addCell(getHeaderCell("  "+milk.getMilkRate()+"", PdfPCell.ALIGN_LEFT, false));
-				table.addCell(getHeaderCell(milk.getMorningMilk()+"", PdfPCell.ALIGN_CENTER, false));
-				table.addCell(getHeaderCell(milk.getEveningMilk()+"", PdfPCell.ALIGN_CENTER, false));
+				table.addCell(getItemCell("  "+new SimpleDateFormat("dd-MMM-yyyy").format(milk.getMilkDate()), PdfPCell.ALIGN_LEFT, false, 0));
+				table.addCell(getItemCell("  "+milk.getMilkRate()+"", PdfPCell.ALIGN_LEFT, false, 0));
+				table.addCell(getItemCell(milk.getMorningMilk()+"", PdfPCell.ALIGN_CENTER, false, 0));
+				table.addCell(getItemCell(milk.getEveningMilk()+"", PdfPCell.ALIGN_CENTER, false, 0));
+				
+				totalMorningMilk += milk.getMorningMilk();
+				totalEveningMilk += milk.getEveningMilk();
+				
 				double dayTotal = (milk.getMorningMilk()+milk.getEveningMilk());
 				totalMilk += dayTotal;
-				totalMilkPrice += (milk.getMorningMilk()*milk.getMilkRate()) + (milk.getEveningMilk()*milk.getMilkRate());
-				table.addCell(getHeaderCell(dayTotal+"", PdfPCell.ALIGN_CENTER, false));
+				
+				double dayTotalPrice = (milk.getMorningMilk()*milk.getMilkRate()) + (milk.getEveningMilk()*milk.getMilkRate());
+				totalMilkPrice += dayTotalPrice;
+				
+				table.addCell(getItemCell(dayTotal+"", PdfPCell.ALIGN_CENTER, false, 0));
+				table.addCell(getItemCell(dayTotalPrice+"", PdfPCell.ALIGN_CENTER, false, 0));
 			}
+			
+			table.addCell(getFooterCell("  ", PdfPCell.ALIGN_LEFT, true, 1));
+			table.addCell(getFooterCell("  ", PdfPCell.ALIGN_LEFT, true, 1));
+			table.addCell(getFooterCell(totalMorningMilk+"", PdfPCell.ALIGN_CENTER, true, 0));
+			table.addCell(getFooterCell(totalEveningMilk+"", PdfPCell.ALIGN_CENTER, true, 0));
+			table.addCell(getFooterCell(totalMilk+"", PdfPCell.ALIGN_CENTER, true, 0));
+			table.addCell(getFooterCell(totalMilkPrice+"", PdfPCell.ALIGN_CENTER, true, 0));
 			
 			document.add(table);
 			
@@ -168,15 +187,54 @@ public class ReportGenerator {
 	    return cell;
 	}
 	
-	public PdfPCell getHeaderCell(String text, int alignment, boolean headerCell) {
+	public PdfPCell getItemCell(String text, int alignment, boolean headerCell, int border) {
+		Font font = headerCell ? header2BoldFont : header2Font;
+		Phrase phrase = new Phrase(text, font);
+	    PdfPCell cell = new PdfPCell(phrase);
+	    cell.setFixedHeight(headerCell ? 30 : 20);
+	    cell.setNoWrap(false);
+	    cell.setPadding(1);
+	    cell.setHorizontalAlignment(alignment);
+	    cell.setVerticalAlignment(PdfPCell.ALIGN_MIDDLE);
+	    
+	    if(border == 1){
+	    	cell.setBorder(PdfPCell.NO_BORDER);
+	    }
+	    cell.setBorderColor(BaseColor.BLACK);
+	    return cell;
+	}
+	
+	public PdfPCell getHeaderCell(String text, int alignment, boolean headerCell, int border) {
+		Font font = headerCell ? header2BoldFont : header2Font;
+		Phrase phrase = new Phrase(text, font);
+	    PdfPCell cell = new PdfPCell(phrase);
+	    cell.setFixedHeight(headerCell ? 30 : 20);
+	    cell.setNoWrap(false);
+	    cell.setPadding(1);
+	    cell.setHorizontalAlignment(alignment);
+	    cell.setVerticalAlignment(PdfPCell.ALIGN_MIDDLE);
+	    cell.setBackgroundColor(BaseColor.GRAY);
+	    
+	    if(border == 1){
+	    	cell.setBorder(PdfPCell.NO_BORDER);
+	    }
+	    cell.setBorderColor(BaseColor.BLACK);
+	    return cell;
+	}
+	
+	public PdfPCell getFooterCell(String text, int alignment, boolean headerCell, int border) {
 		Font font = headerCell ? header2BoldFont : header2Font;
 		Phrase phrase = new Phrase(text, font);
 	    PdfPCell cell = new PdfPCell(phrase);
 	    cell.setFixedHeight(20);
+	    cell.setNoWrap(false);
 	    cell.setPadding(1);
 	    cell.setHorizontalAlignment(alignment);
 	    cell.setVerticalAlignment(PdfPCell.ALIGN_MIDDLE);
-	    //cell.setBorder(1);
+	    
+	    if(border == 1){
+	    	cell.setBorder(PdfPCell.NO_BORDER);
+	    }
 	    cell.setBorderColor(BaseColor.BLACK);
 	    return cell;
 	}

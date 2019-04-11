@@ -1,5 +1,7 @@
 package com.tabela.accounting.view;
 
+import java.time.LocalDate;
+
 import com.tabela.accounting.controls.FXOptionPane;
 import com.tabela.accounting.util.AppUtil;
 
@@ -13,12 +15,12 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.VBox;
 
-public class ReportLayout extends VBox {
+public class MilkInvoiceLayout extends VBox {
 	public Button btnReport;
 	public DatePicker fromDate;
 	public DatePicker toDate;
 
-	public ReportLayout() {
+	public MilkInvoiceLayout() {
 		setAlignment(Pos.TOP_CENTER);
 		setSpacing(20.0D);
 		setPadding(new Insets(10.0D));
@@ -39,14 +41,14 @@ public class ReportLayout extends VBox {
 		EventHandler<KeyEvent> handler = new EventHandler<KeyEvent>() {
 			public void handle(KeyEvent arg0) {
 				if (arg0.getCode() == KeyCode.ENTER) {
-					if (ReportLayout.this.fromDate.getValue() == null) {
+					if (MilkInvoiceLayout.this.fromDate.getValue() == null) {
 						FXOptionPane.showErrorDialog(null, "Please enter from date", "Error");
-						ReportLayout.this.fromDate.requestFocus();
-					} else if (ReportLayout.this.fromDate.getValue() == null) {
+						MilkInvoiceLayout.this.fromDate.requestFocus();
+					} else if (MilkInvoiceLayout.this.fromDate.getValue() == null) {
 						FXOptionPane.showErrorDialog(null, "Please enter to date", "Error");
-						ReportLayout.this.toDate.requestFocus();
+						MilkInvoiceLayout.this.toDate.requestFocus();
 					} else {
-						ReportLayout.this.btnReport.fire();
+						MilkInvoiceLayout.this.btnReport.fire();
 					}
 				}
 			}
@@ -54,6 +56,9 @@ public class ReportLayout extends VBox {
 		setOnKeyPressed(handler);
 
 		getChildren().addAll(new Node[] { this.fromDate, this.toDate, this.btnReport });
+		
+		fromDate.setValue(LocalDate.now().minusDays(7L));
+		toDate.setValue(LocalDate.now());
 	}
 
 	public Button getBtnReport() {

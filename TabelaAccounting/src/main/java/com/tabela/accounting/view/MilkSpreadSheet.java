@@ -19,6 +19,7 @@ import org.controlsfx.control.spreadsheet.SpreadsheetView;
 
 import com.tabela.accounting.TabelaAccounting;
 import com.tabela.accounting.controllers.MainController;
+import com.tabela.accounting.controllers.MilkCustomerController;
 import com.tabela.accounting.enums.CustomerType;
 import com.tabela.accounting.enums.TransactionSource;
 import com.tabela.accounting.enums.TransactionType;
@@ -116,7 +117,7 @@ public class MilkSpreadSheet extends VBox {
 				}
 			}
 		});
-		dt.setValue(LocalDate.now().minusDays(5L));
+		dt.setValue(LocalDate.now().minusDays(7L));
 		getChildren().add(hBox);
 	}
 
@@ -126,7 +127,7 @@ public class MilkSpreadSheet extends VBox {
 		Stage stage = getStage();
 		stage.show();
 		
-		List<MilkCustomer> list = FacadeFactory.getFacade().list(MilkCustomer.class);
+		List<MilkCustomer> list = MilkCustomerController.getActiveCustomers();
 		int days = Period.between((LocalDate) dt.getValue(), (LocalDate) dt2.getValue()).getDays();
 		int columnCount = 5 + days * 2;
 		int rowCount = list.size() + 3;
