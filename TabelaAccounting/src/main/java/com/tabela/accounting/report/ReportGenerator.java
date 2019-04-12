@@ -51,7 +51,7 @@ public class ReportGenerator {
 		document = new Document();
 		try {
 			document.setMargins(15, 15, 10, 15);
-			PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream(System.getProperty("user.home")+"/MilkInvoices.pdf"));
+			PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream(System.getProperty("user.home")+"/Tabela Accounting/MilkInvoices.pdf"));
 			document.open();
 			int count = 1;
 			for(MilkCustomer customer : customers){
@@ -67,7 +67,7 @@ public class ReportGenerator {
 			document.close();
 			writer.close();
 			
-			return new File(System.getProperty("user.home")+"/MilkInvoices.pdf");
+			return new File(System.getProperty("user.home")+"/Tabela Accounting/MilkInvoices.pdf");
 		} catch (DocumentException e) {
 			e.printStackTrace();
 			return null;

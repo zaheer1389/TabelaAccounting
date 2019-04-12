@@ -48,16 +48,22 @@ import javafx.util.StringConverter;
 public class ExpenseController implements Initializable {
 
 	@FXML
-    private DatePicker txtExpenseDate;
+    private DatePicker txtFromDate;
+	
+	@FXML
+    private DatePicker txtToDate;
 
     @FXML
     private Button btnSearch;
 
     @FXML
     private Button btnClearSearch;
-
+    
     @FXML
     private Button btnAddExpense;
+
+    @FXML
+    private Button btnPDF;
 
     @FXML
     private VBox content;
@@ -197,6 +203,12 @@ public class ExpenseController implements Initializable {
         
         tableExpense.setItems(FXCollections.observableArrayList(expenses));
 	}
+    
+    @FXML
+	void exportPDF(ActionEvent event) {
+		// New window (Stage)
+		
+	}
 
     @FXML
 	void addExpense(ActionEvent event) {
@@ -206,19 +218,23 @@ public class ExpenseController implements Initializable {
 
 	@FXML
 	void clearSearch(ActionEvent event) {
-		txtExpenseDate.setValue(null);
+		txtFromDate.setValue(null);
 		setTable(getExpenses());
 	}
 
 	@FXML
 	void search(ActionEvent event) {
-		if(txtExpenseDate.getValue() == null){
-			DialogFactory.showErrorDialog("Please select Expense date", TabelaAccounting.stage);
+		if(txtFromDate.getValue() == null){
+			DialogFactory.showErrorDialog("Please select from date", TabelaAccounting.stage);
 			return;
 		}
-		List<Expense> milks = getExpenses(txtExpenseDate.getValue());
+		if(txtToDate.getValue() == null){
+			DialogFactory.showErrorDialog("Please select to date", TabelaAccounting.stage);
+			return;
+		}
+		List<Expense> milks = getExpenses(txtFromDate.getValue(), txtToDate.getValue());
 		if(milks == null || milks.size() == 0){
-			DialogFactory.showInformationDialog("No expense founds for selected date", TabelaAccounting.stage);
+			DialogFactory.showInformationDialog("No expense founds for selected dates", TabelaAccounting.stage);
 			return;
 		}
 		setTable(milks);
@@ -268,10 +284,11 @@ public class ExpenseController implements Initializable {
 		return FacadeFactory.getFacade().list(Expense.class);
 	}
 
-	public static List<Expense> getExpenses(LocalDate localDate) {
-		 String queryStr = "Select m From Expense m where m.expenseDate = :dt";
+	public static List<Expense> getExpenses(LocalDate fromDate, LocalDate toDate) {
+		 String queryStr = "Select m From Expense m where m.expenseDate between :dt and :dt2";
 		 Map<String, Object> parameters = new HashMap();
-		 parameters.put("dt", new Timestamp(AppUtil.toUtilDate(localDate).getTime()));
+		 parameters.put("dt", new Timestamp(AppUtil.toUtilDate(fromDate).getTime()));
+		 parameters.put("dt2", new Timestamp(AppUtil.toUtilDate(toDate).getTime()));
 		 return FacadeFactory.getFacade().list(queryStr, parameters);
 	}
 

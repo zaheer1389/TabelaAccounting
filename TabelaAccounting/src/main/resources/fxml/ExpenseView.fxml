@@ -17,9 +17,11 @@
                   <Insets left="10.0" />
                </padding>
                <children>
-                  <DatePicker fx:id="txtExpenseDate" promptText="Expense Date" />
+                  <DatePicker fx:id="txtFromDate" prefHeight="26.0" prefWidth="131.0" promptText="From Date" />
+                  <DatePicker fx:id="txtToDate" prefHeight="26.0" prefWidth="126.0" promptText="To Date" />
                   <Button fx:id="btnSearch" mnemonicParsing="false" onAction="#search" text="Search" />
                   <Button fx:id="btnClearSearch" mnemonicParsing="false" onAction="#clearSearch" text="Clear Search" />
+                  <Button fx:id="btnPDF" mnemonicParsing="false" onAction="#exportPDF" text="PDF" />
                </children>
             </HBox>
             <HBox alignment="CENTER_RIGHT" prefHeight="100.0" prefWidth="0.0" HBox.hgrow="ALWAYS">
