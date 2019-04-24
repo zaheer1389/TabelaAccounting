@@ -42,6 +42,8 @@ public class ReportGenerator {
 	Date fromDate;
 	Date toDate;
 	
+	boolean dataAvailable = false;
+	
 	public File generate(List<MilkCustomer> customers, Date fromDate, Date toDate) {
 
 		this.customers = customers;
@@ -57,6 +59,7 @@ public class ReportGenerator {
 			for(MilkCustomer customer : customers){
 				List<CustomerMilk> milks = getMilks(customer);
 				if(milks != null && milks.size() > 0){
+					dataAvailable = true;
 					process(customer, milks);
 					if(count % 2 == 0){
 						document.newPage();
@@ -64,6 +67,11 @@ public class ReportGenerator {
 					count++;
 				}
 			}
+			
+			if(!dataAvailable){
+				document.add(new Paragraph("No milk data found to create bill"));
+			}
+			
 			document.close();
 			writer.close();
 			

@@ -9,6 +9,8 @@
     <class>com.tabela.accounting.model.CustomerMilk</class>
     <class>com.tabela.accounting.model.MilkPayment</class>
     <class>com.tabela.accounting.model.Expense</class>
+    <class>com.tabela.accounting.model.Merchant</class>
+    <class>com.tabela.accounting.model.MerchantPayment</class>
     
     <properties>
       <!-- <property name="javax.persistence.jdbc.driver" value="com.mysql.jdbc.Driver" />

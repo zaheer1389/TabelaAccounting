@@ -41,10 +41,16 @@
                   </Menu>
               </items>
             </Menu>
+            <Menu fx:id="menuMerchants" mnemonicParsing="false" text="Merchant">
+              <items>
+                <MenuItem fx:id="menuMerchants_menuItemMerchants" mnemonicParsing="false" onAction="#merchant" text="Merchants" />
+                  <MenuItem fx:id="menuMerchants_menuItemMerchantPayment" mnemonicParsing="false" onAction="#merchantPayment" text="Merchant Payment" />
+              </items>
+            </Menu>
             <Menu fx:id="menuExpense" mnemonicParsing="false" text="Expense">
               <items>
                 <MenuItem fx:id="menuExpense_menuItemExpenses" mnemonicParsing="false" onAction="#expense" text="Expenses" />
-                  <MenuItem fx:id="menuExpense_menuItemExpenseReport" mnemonicParsing="false" onAction="#expenseReport" text="Report" />
+                  
               </items>
             </Menu>
         <Menu fx:id="menuHelp" mnemonicParsing="false" text="Help">

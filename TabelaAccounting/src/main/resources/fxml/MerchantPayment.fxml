@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox prefHeight="556.0" prefWidth="656.0" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.tabela.accounting.controllers.MerchantPaymentController">
+   <children>
+      <HBox prefHeight="40.0" prefWidth="200.0">
+         <children>
+            <HBox alignment="CENTER_LEFT" spacing="10.0" HBox.hgrow="ALWAYS">
+               <padding>
+                  <Insets left="10.0" />
+               </padding>
+               <children>
+                  <ComboBox fx:id="cmbMerchants" prefWidth="150.0" promptText="Merchant" />
+                  <DatePicker fx:id="txtPaymentDate" promptText="Payment Date" />
+                  <Button fx:id="btnSearch" mnemonicParsing="false" onAction="#search" text="Search" />
+                  <Button fx:id="btnClearSearch" mnemonicParsing="false" onAction="#clearSearch" text="Clear Search" />
+               </children>
+            </HBox>
+            <HBox alignment="CENTER_RIGHT" prefHeight="100.0" prefWidth="0.0" HBox.hgrow="ALWAYS">
+               <HBox.margin>
+                  <Insets />
+               </HBox.margin>
+               <padding>
+                  <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+               </padding>
+               <children>
+                  <Button fx:id="btnAddCustomer" mnemonicParsing="false" onAction="#addPayment" text="Add Payment" />
+               </children>
+            </HBox>
+         </children>
+      </HBox>
+      <VBox fx:id="content" prefHeight="768.0" prefWidth="100.0" stylesheets="@../css/stylehseet.css" VBox.vgrow="ALWAYS">
+         <children>
+            <TableView fx:id="tablePayment" minHeight="500.0" minWidth="500.0" prefHeight="354.0" prefWidth="737.0" VBox.vgrow="ALWAYS">
+              <columns>
+                <TableColumn fx:id="colCustomerName" prefWidth="190.0" text="Merchant Name" />
+                <TableColumn fx:id="colPaymentDate" prefWidth="174.0" text="Payment Date" />
+                  <TableColumn fx:id="colAmount" prefWidth="100.0" text="Amount" />
+                  <TableColumn fx:id="colEdit" prefWidth="63.0" text="Edit" />
+                  <TableColumn fx:id="colDelete" prefWidth="77.0" text="Delete" />
+              </columns>
+            </TableView>
+         </children>
+         <padding>
+            <Insets bottom="10.0" left="10.0" right="10.0" />
+         </padding>
+      </VBox>
+   </children>
+</VBox>

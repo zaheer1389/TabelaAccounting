@@ -86,6 +86,15 @@ public class MainController implements Initializable {
     private MenuItem menuMilk_MenuItemPrintBillAllCustomer;
     
     @FXML
+    private Menu menuMerchants;
+
+    @FXML
+    private MenuItem menuMerchants_menuItemMerchants;
+
+    @FXML
+    private MenuItem menuMerchants_menuItemMerchantPayment;
+    
+    @FXML
     private Menu menuExpense;
 
     @FXML
@@ -300,6 +309,34 @@ public class MainController implements Initializable {
     @FXML
     void expenseReport(ActionEvent event) {
 
+    }
+    
+    @FXML
+    void merchant(ActionEvent event) {
+    	lblPageTitle.setText("Merchants");
+    	
+    	try {
+			Parent root = FXMLLoader.load(getClass().getResource("/fxml/Merchant.fxml"));
+			content.getChildren().clear();
+			content.getChildren().add(root);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+    }
+
+    @FXML
+    void merchantPayment(ActionEvent event) {
+    	lblPageTitle.setText("Merchant Payments");
+    	
+    	try {
+			Parent root = FXMLLoader.load(getClass().getResource("/fxml/MerchantPayment.fxml"));
+			content.getChildren().clear();
+			content.getChildren().add(root);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
     }
    
 }

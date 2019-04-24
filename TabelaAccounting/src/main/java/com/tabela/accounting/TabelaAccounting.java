@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.sql.Connection;
+import java.sql.DriverManager;
 import java.util.Properties;
 
 import javax.persistence.EntityManager;
@@ -105,6 +107,19 @@ public class TabelaAccounting extends Application {
 	
 	public static Branch getBranch(){
 		return FacadeFactory.getFacade().find(Branch.class, 1L);
+	}
+	
+	public static Connection getConnection() {
+		//Connection connection = null;
+		try {
+			Properties properties = getProperties();
+			Class.forName(properties.getProperty("jdbc.driver"));
+			return DriverManager.getConnection(properties.getProperty("jdbc.url"),
+					properties.getProperty("jdbc.username"), properties.getProperty("jdbc.password"));
+		} catch (Exception e) {
+			DialogFactory.showExceptionDialog(e, null);
+		}
+		return null;
 	}
 
 }

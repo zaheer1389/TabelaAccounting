@@ -1,10 +1,10 @@
 package com.tabela.accounting.controllers;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URL;
 import java.sql.Timestamp;
 import java.time.LocalDate;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -13,9 +13,7 @@ import java.util.ResourceBundle;
 import com.tabela.accounting.TabelaAccounting;
 import com.tabela.accounting.controls.FXOptionPane;
 import com.tabela.accounting.enums.DialogType;
-import com.tabela.accounting.model.CustomerMilk;
 import com.tabela.accounting.model.Expense;
-import com.tabela.accounting.model.MilkCustomer;
 import com.tabela.accounting.persistence.FacadeFactory;
 import com.tabela.accounting.util.AppUtil;
 import com.tabela.accounting.util.DialogFactory;
@@ -30,8 +28,6 @@ import javafx.geometry.Rectangle2D;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.control.CheckBox;
-import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
@@ -43,7 +39,11 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.stage.WindowEvent;
 import javafx.util.Callback;
-import javafx.util.StringConverter;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.JasperReport;
+import net.sf.jasperreports.engine.util.JRLoader;
+import net.sf.jasperreports.view.JasperViewer;
 
 public class ExpenseController implements Initializable {
 
@@ -207,7 +207,31 @@ public class ExpenseController implements Initializable {
     @FXML
 	void exportPDF(ActionEvent event) {
 		// New window (Stage)
+    	if(txtFromDate.getValue() == null){
+			DialogFactory.showErrorDialog("Please select from date", TabelaAccounting.stage);
+			return;
+		}
+		if(txtToDate.getValue() == null){
+			DialogFactory.showErrorDialog("Please select to date", TabelaAccounting.stage);
+			return;
+		}
 		
+		try{
+			Map<String, Object> map = new HashMap();
+			map.put("fromDate", AppUtil.toUtilDate(txtFromDate.getValue()));
+			map.put("toDate", AppUtil.toUtilDate(txtToDate.getValue()));
+			InputStream is = getClass().getResourceAsStream("/jrxml/ExpenseReport.jasper");
+			
+			JasperReport jr = (JasperReport)JRLoader.loadObject(is);
+			JasperPrint jp = JasperFillManager.fillReport(jr, map, 
+			TabelaAccounting.getConnection());
+			JasperViewer viewer = new JasperViewer(jp, false);
+			viewer.setTitle("Expense Report");
+			viewer.setVisible(true);
+		}
+		catch(Exception e){
+			
+		}
 	}
 
     @FXML

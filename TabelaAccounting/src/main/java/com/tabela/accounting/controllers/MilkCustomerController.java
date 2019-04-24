@@ -236,7 +236,7 @@ public class MilkCustomerController implements Initializable {
 	}
 	
 	public static List<MilkCustomer> getActiveCustomers() {
-		String queryStr = "Select c from MilkCustomer as c where c.active = true ";
+		String queryStr = "Select c from MilkCustomer as c where c.active = false ";
 		List<MilkCustomer> l = FacadeFactory.getFacade().list(queryStr, null);
 		return l;
 	}
