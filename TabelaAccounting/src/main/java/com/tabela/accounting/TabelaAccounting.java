@@ -47,7 +47,7 @@ public class TabelaAccounting extends Application {
 	    controller.setHostServices(getHostServices());
 	    
 		Scene scene = new Scene(root);
-		scene.getStylesheets().add("org/kordamp/bootstrapfx/bootstrapfx.css");
+		//scene.getStylesheets().add("org/kordamp/bootstrapfx/bootstrapfx.css");
 		scene.getStylesheets().add("themes/style.css");
 		stage.setScene(scene);
 		stage.initStyle(StageStyle.UNIFIED);
