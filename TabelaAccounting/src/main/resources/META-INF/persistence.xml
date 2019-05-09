@@ -29,6 +29,9 @@
       <property name="eclipselink.ddl-generation.output-mode" value="database"/>
       <property name="eclipselink.orm.throw.exceptions" value="true" />
       <property name="eclipselink.sql_mode" value="ANSI"/>
+      
+      <property name="eclipselink.logging.level.sql" value="FINE"/>
+	<property name="eclipselink.logging.parameters" value="true"/>
 
     </properties>
 

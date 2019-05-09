@@ -446,8 +446,8 @@ public class MilkSpreadSheet extends VBox {
 	public List<CustomerMilk> getMilks(){
 		String queryStr = "Select c from CustomerMilk as c where c.milkDate between :fromDate and :toDate";
 		Map<String, Object> parameters = new HashMap();
-		parameters.put("fromDate",new Timestamp(AppUtil.toUtilDate((LocalDate) dt.getValue()).getTime()));
-		parameters.put("toDate",new Timestamp(AppUtil.toUtilDate((LocalDate) dt2.getValue()).getTime()));
+		parameters.put("fromDate",new Timestamp(AppUtil.toUtilDate(dt.getValue()).getTime()));
+		parameters.put("toDate",new Timestamp(AppUtil.toUtilDate(dt2.getValue()).getTime()));
 		return FacadeFactory.getFacade().list(queryStr, parameters);
 	}
 
