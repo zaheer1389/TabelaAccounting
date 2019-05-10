@@ -11,10 +11,12 @@ import java.util.ResourceBundle;
 import com.tabela.accounting.TabelaAccounting;
 import com.tabela.accounting.model.MilkCustomer;
 import com.tabela.accounting.persistence.FacadeFactory;
-import com.tabela.accounting.report.ReportGenerator;
+import com.tabela.accounting.report.MilkAccountSheetGenerator;
+import com.tabela.accounting.report.MilkInvoiceGenerator;
 import com.tabela.accounting.util.AppUtil;
 import com.tabela.accounting.util.DialogFactory;
 import com.tabela.accounting.view.MilkSpreadSheet;
+import com.tabela.accounting.view.DateRangeLayout;
 import com.tabela.accounting.view.MilkInvoiceLayout;
 
 import javafx.application.HostServices;
@@ -102,6 +104,12 @@ public class MainController implements Initializable {
 
     @FXML
     private MenuItem menuExpense_menuItemExpenseReport;
+    
+    @FXML
+    private Menu menuReport;
+
+    @FXML
+    private MenuItem menuReport_BillSheet;
 
     @FXML
     private Menu menuHelp;
@@ -213,7 +221,7 @@ public class MainController implements Initializable {
 			public void handle(ActionEvent arg0) {
 				try {
 					List<MilkCustomer> customers = listView.getSelectionModel().getSelectedItems();
-					File report = new ReportGenerator().generate(customers, AppUtil.toUtilDate((LocalDate) root.getFromDate().getValue()),
+					File report = new MilkInvoiceGenerator().generate(customers, AppUtil.toUtilDate((LocalDate) root.getFromDate().getValue()),
 							AppUtil.toUtilDate((LocalDate) root.getToDate().getValue()));
 					if(report != null){
 						hostServices.showDocument(report.getAbsolutePath());
@@ -248,7 +256,7 @@ public class MainController implements Initializable {
 			public void handle(ActionEvent arg0) {
 				try {
 					List<MilkCustomer> customers = listView.getSelectionModel().getSelectedItems();
-					File report = new ReportGenerator().generate(customers, AppUtil.toUtilDate((LocalDate) root.getFromDate().getValue()),
+					File report = new MilkInvoiceGenerator().generate(customers, AppUtil.toUtilDate((LocalDate) root.getFromDate().getValue()),
 							AppUtil.toUtilDate((LocalDate) root.getToDate().getValue()));
 					if(report != null){
 						hostServices.showDocument(report.getAbsolutePath());
@@ -337,6 +345,37 @@ public class MainController implements Initializable {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+    }
+    
+    @FXML
+    void printBillSheet(ActionEvent event) {
+    	DateRangeLayout dateRangeLayout = new DateRangeLayout();
+    	dateRangeLayout.getBtnReport().setOnAction(new EventHandler<ActionEvent>() {
+			public void handle(ActionEvent arg0) {
+				try {
+					List<MilkCustomer> customers = MilkCustomerController.getActiveCustomers();
+					File report = new MilkAccountSheetGenerator().generate(customers, AppUtil.toUtilDate((LocalDate) dateRangeLayout.getFromDate().getValue()),
+							AppUtil.toUtilDate((LocalDate) dateRangeLayout.getToDate().getValue()));
+					if(report != null){
+						hostServices.showDocument(report.getAbsolutePath());
+					}
+				} catch (Exception e) {
+					DialogFactory.showExceptionDialog(e, null);
+				}
+			}
+		});
+		Stage stage = new Stage();
+		stage.setTitle("Print Bill Sheet");
+		stage.setResizable(false);
+		stage.initModality(Modality.WINDOW_MODAL);
+		stage.initOwner(TabelaAccounting.getPrimaryStage());
+
+		Scene scene = new Scene(dateRangeLayout, 400.0D, 400.0D);
+		stage.setScene(scene);
+
+		//stage.setX(100.0D);
+		//stage.setY(100.0D);
+		stage.show();
     }
    
 }

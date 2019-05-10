@@ -29,7 +29,7 @@ import com.tabela.accounting.model.MilkCustomer;
 import com.tabela.accounting.persistence.FacadeFactory;
 import com.tabela.accounting.persistence.JPAFacade;
 
-public class ReportGenerator {
+public class MilkInvoiceGenerator {
 
 	Document document;
 	
