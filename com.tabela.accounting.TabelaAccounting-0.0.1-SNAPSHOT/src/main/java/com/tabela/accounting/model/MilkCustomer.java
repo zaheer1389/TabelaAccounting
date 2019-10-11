@@ -57,6 +57,9 @@ public class MilkCustomer extends AbstractPojo implements Serializable {
 	
 	@Transient
 	private String strJoinDate;
+	
+	@JoinColumn(name="Tempo")
+	private Tempo tempo;
 
 	public Double getPendingBillAmount() {
 		return Double.valueOf(this.pendingBillAmount != null ? this.pendingBillAmount.doubleValue() : 0.0D);
@@ -154,4 +157,14 @@ public class MilkCustomer extends AbstractPojo implements Serializable {
 	public void setStrJoinDate(String strJoinDate) {
 		this.strJoinDate = strJoinDate;
 	}
+
+	public Tempo getTempo() {
+		return tempo;
+	}
+
+	public void setTempo(Tempo tempo) {
+		this.tempo = tempo;
+	}
+	
+	
 }

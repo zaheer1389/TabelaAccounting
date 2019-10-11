@@ -53,6 +53,12 @@
                   
               </items>
             </Menu>
+            <Menu fx:id="menuTempo" mnemonicParsing="false" text="Tempo">
+              <items>
+                <MenuItem fx:id="menuTempo_menuItemManageTempo" mnemonicParsing="false" onAction="#manageTempo" text="Manage Tempo" />
+                  <MenuItem fx:id="menuTempo_menuItemHeilReport" mnemonicParsing="false" onAction="#heilReport" text="Heil Report" />
+              </items>
+            </Menu>
             <Menu fx:id="menuReport" mnemonicParsing="false" text="Report">
               <items>
                 <MenuItem fx:id="menuReport_BillSheet" mnemonicParsing="false" onAction="#printBillSheet" text="Bill Sheet" />

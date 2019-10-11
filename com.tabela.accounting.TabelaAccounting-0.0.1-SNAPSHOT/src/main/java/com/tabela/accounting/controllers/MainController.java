@@ -106,6 +106,16 @@ public class MainController implements Initializable {
     private MenuItem menuExpense_menuItemExpenseReport;
     
     @FXML
+    private Menu menuTempo;
+
+    @FXML
+    private MenuItem menuTempo_menuItemManageTempo;
+
+    @FXML
+    private MenuItem menuTempo_menuItemHeilReport;
+
+    
+    @FXML
     private Menu menuReport;
 
     @FXML
@@ -339,6 +349,25 @@ public class MainController implements Initializable {
     	
     	try {
 			Parent root = FXMLLoader.load(getClass().getResource("/fxml/MerchantPayment.fxml"));
+			content.getChildren().clear();
+			content.getChildren().add(root);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+    }
+    
+    @FXML
+    void heilReport(ActionEvent event) {
+
+    }
+
+    @FXML
+    void manageTempo(ActionEvent event) {
+    	lblPageTitle.setText("Tempos");
+    	
+    	try {
+			Parent root = FXMLLoader.load(getClass().getResource("/fxml/Tempo.fxml"));
 			content.getChildren().clear();
 			content.getChildren().add(root);
 		} catch (IOException e) {

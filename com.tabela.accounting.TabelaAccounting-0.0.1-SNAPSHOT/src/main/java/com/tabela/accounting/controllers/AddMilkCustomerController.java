@@ -4,19 +4,23 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 import com.tabela.accounting.TabelaAccounting;
+import com.tabela.accounting.model.Merchant;
 import com.tabela.accounting.model.MilkCustomer;
+import com.tabela.accounting.model.Tempo;
 import com.tabela.accounting.persistence.FacadeFactory;
 import com.tabela.accounting.util.DialogFactory;
 
 import javafx.application.Platform;
+import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.geometry.Rectangle2D;
 import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import javafx.util.StringConverter;
 
 public class AddMilkCustomerController implements Initializable{
 
@@ -34,6 +38,9 @@ public class AddMilkCustomerController implements Initializable{
 
     @FXML
     private TextField txtPendingBillAmount;
+    
+    @FXML
+    private ComboBox<Tempo> cmbTempo;
 
     @FXML
     private Button btnSave;
@@ -47,6 +54,25 @@ public class AddMilkCustomerController implements Initializable{
 
     @Override
 	public void initialize(URL url, ResourceBundle rb) {
+    	
+    	cmbTempo.setItems(FXCollections.observableArrayList(TempoController.getTempos()));
+    	cmbTempo.setConverter(new StringConverter<Tempo>() {
+			
+			@Override
+			public String toString(Tempo object) {
+				// TODO Auto-generated method stub
+				return object.getTempoName();
+			}
+			
+			@Override
+			public Tempo fromString(String string) {
+				// TODO Auto-generated method stub
+				return cmbTempo.getItems().stream().filter(customer -> 
+								customer.getTempoName().equals(string)).findFirst().orElse(null);
+			}
+		});
+		
+		
     	Platform.runLater(new Runnable() {
 			
 			@Override
@@ -90,6 +116,11 @@ public class AddMilkCustomerController implements Initializable{
     		return;
     	}
     	
+    	if(cmbTempo.getValue() == null){
+    		DialogFactory.showErrorDialog("Please select tempo", stage);
+    		return;
+    	}
+    	
     	if(customer == null){
     		customer = new MilkCustomer();
     	}
@@ -98,6 +129,7 @@ public class AddMilkCustomerController implements Initializable{
     	customer.setCustomerAddress(txtCustomerAddress.getText());
     	customer.setMilkRate(Double.parseDouble(txtMilkRate.getText()));
     	customer.setBillAmount(Double.parseDouble(txtPendingBillAmount.getText()));
+    	customer.setTempo(cmbTempo.getValue());
     	FacadeFactory.getFacade().store(customer);
     	
     	DialogFactory.showInformationDialog("Customer saved successfully", TabelaAccounting.stage);
@@ -111,12 +143,14 @@ public class AddMilkCustomerController implements Initializable{
 	    	txtCustomerAddress.setText("");
 	    	txtMilkRate.setText("");
 	    	txtPendingBillAmount.setText("");
+	    	cmbTempo.setValue(null);
     	}
     	else{
     		txtCustomerName.setText(customer.getCustomerName());
 	    	txtCustomerAddress.setText(customer.getCustomerAddress());
 	    	txtMilkRate.setText(customer.getMilkRate()+"");
 	    	txtPendingBillAmount.setText(customer.getPendingBillAmount()+"");
+	    	cmbTempo.setValue(customer.getTempo());
     	}
     }
 
