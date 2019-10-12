@@ -11,6 +11,7 @@ import com.tabela.accounting.TabelaAccounting;
 import com.tabela.accounting.controls.FXOptionPane;
 import com.tabela.accounting.enums.DialogType;
 import com.tabela.accounting.model.Merchant;
+import com.tabela.accounting.model.MilkCustomer;
 import com.tabela.accounting.model.Tempo;
 import com.tabela.accounting.model.Merchant;
 import com.tabela.accounting.persistence.FacadeFactory;
@@ -187,6 +188,15 @@ public class TempoController implements Initializable {
 		Map<String, Object> parameters = new HashMap<String, Object>();
 		parameters.put("cname", "%" + name + "%");
 		List<Tempo> l = FacadeFactory.getFacade().list(queryStr, parameters);
+		return l;
+	}
+	
+	public static List<MilkCustomer> getTempoCustomers(Tempo tempo){
+		String queryStr = "Select c From MilkCustomer as c where c.tempo = :tempo ";
+
+		Map<String, Object> parameters = new HashMap<String, Object>();
+		parameters.put("tempo", tempo);
+		List<MilkCustomer> l = FacadeFactory.getFacade().list(queryStr, parameters);
 		return l;
 	}
 

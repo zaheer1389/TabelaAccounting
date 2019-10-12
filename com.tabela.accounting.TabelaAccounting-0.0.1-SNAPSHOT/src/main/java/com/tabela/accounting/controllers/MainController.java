@@ -10,7 +10,9 @@ import java.util.ResourceBundle;
 
 import com.tabela.accounting.TabelaAccounting;
 import com.tabela.accounting.model.MilkCustomer;
+import com.tabela.accounting.model.Tempo;
 import com.tabela.accounting.persistence.FacadeFactory;
+import com.tabela.accounting.report.HeilReportGenerator;
 import com.tabela.accounting.report.MilkAccountSheetGenerator;
 import com.tabela.accounting.report.MilkInvoiceGenerator;
 import com.tabela.accounting.util.AppUtil;
@@ -359,7 +361,33 @@ public class MainController implements Initializable {
     
     @FXML
     void heilReport(ActionEvent event) {
+    	DateRangeLayout dateRangeLayout = new DateRangeLayout();
+    	dateRangeLayout.getBtnReport().setOnAction(new EventHandler<ActionEvent>() {
+			public void handle(ActionEvent arg0) {
+				try {
+					List<Tempo> customers = TempoController.getTempos();
+					File report = new HeilReportGenerator().generate(customers, AppUtil.toUtilDate((LocalDate) dateRangeLayout.getFromDate().getValue()),
+							AppUtil.toUtilDate((LocalDate) dateRangeLayout.getToDate().getValue()));
+					if(report != null){
+						hostServices.showDocument(report.getAbsolutePath());
+					}
+				} catch (Exception e) {
+					DialogFactory.showExceptionDialog(e, null);
+				}
+			}
+		});
+		Stage stage = new Stage();
+		stage.setTitle("Print Heil Charges Report");
+		stage.setResizable(false);
+		stage.initModality(Modality.WINDOW_MODAL);
+		stage.initOwner(TabelaAccounting.getPrimaryStage());
 
+		Scene scene = new Scene(dateRangeLayout, 400.0D, 400.0D);
+		stage.setScene(scene);
+
+		//stage.setX(100.0D);
+		//stage.setY(100.0D);
+		stage.show();
     }
 
     @FXML
