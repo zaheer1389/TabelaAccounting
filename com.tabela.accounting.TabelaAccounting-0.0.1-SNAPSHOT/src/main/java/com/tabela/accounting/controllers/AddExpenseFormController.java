@@ -52,7 +52,7 @@ public class AddExpenseFormController implements Initializable {
     boolean readOnly;
     
     private String expenseType [] = {"Tabela General", "Salvage Exp", "Medical Exp", "Construction Work", 
-    		"Electricity Exp", "Freight Paid", "Heil Charges", "Dairy Exp", "Conveyance/Travelling", 
+    		"Electricity Exp", "Society Payment", "Buffalo Purchased", "Freight Paid", "Heil Charges", "Dairy Exp", "Conveyance/Travelling", 
     		"Printing/Stationary", "Telephone/Mobile Exp", "Transportation Exp", "Travelling Exp", "Diwali", "Other"};
     
 	@Override

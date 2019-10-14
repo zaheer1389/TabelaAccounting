@@ -15,6 +15,7 @@ import com.tabela.accounting.persistence.FacadeFactory;
 import com.tabela.accounting.report.HeilReportGenerator;
 import com.tabela.accounting.report.MilkAccountSheetGenerator;
 import com.tabela.accounting.report.MilkInvoiceGenerator;
+import com.tabela.accounting.report.ProfitLossReportGenerator;
 import com.tabela.accounting.util.AppUtil;
 import com.tabela.accounting.util.DialogFactory;
 import com.tabela.accounting.view.MilkSpreadSheet;
@@ -122,6 +123,9 @@ public class MainController implements Initializable {
 
     @FXML
     private MenuItem menuReport_BillSheet;
+    
+    @FXML
+    private MenuItem menuReport_ProfitLossReport;
 
     @FXML
     private Menu menuHelp;
@@ -329,6 +333,37 @@ public class MainController implements Initializable {
     @FXML
     void expenseReport(ActionEvent event) {
 
+    }
+    
+    @FXML
+    void profitLossReport(ActionEvent event) {
+    	DateRangeLayout dateRangeLayout = new DateRangeLayout();
+    	dateRangeLayout.getBtnReport().setOnAction(new EventHandler<ActionEvent>() {
+			public void handle(ActionEvent arg0) {
+				try {
+					List<Tempo> customers = TempoController.getTempos();
+					File report = new ProfitLossReportGenerator().generate(AppUtil.toUtilDate((LocalDate) dateRangeLayout.getFromDate().getValue()),
+							AppUtil.toUtilDate((LocalDate) dateRangeLayout.getToDate().getValue()));
+					if(report != null){
+						hostServices.showDocument(report.getAbsolutePath());
+					}
+				} catch (Exception e) {
+					DialogFactory.showExceptionDialog(e, null);
+				}
+			}
+		});
+		Stage stage = new Stage();
+		stage.setTitle("Profit/Loss Report");
+		stage.setResizable(false);
+		stage.initModality(Modality.WINDOW_MODAL);
+		stage.initOwner(TabelaAccounting.getPrimaryStage());
+
+		Scene scene = new Scene(dateRangeLayout, 400.0D, 400.0D);
+		stage.setScene(scene);
+
+		//stage.setX(100.0D);
+		//stage.setY(100.0D);
+		stage.show();
     }
     
     @FXML

@@ -68,6 +68,9 @@ public class MilkCustomerController implements Initializable {
 
 	@FXML
 	private TableColumn colMilkRate;
+	
+	@FXML
+	private TableColumn colTempo;
 
 	@FXML
 	private TableColumn colPendingBill;
@@ -114,6 +117,8 @@ public class MilkCustomerController implements Initializable {
 		colCustomerAddress.setCellValueFactory(new PropertyValueFactory("customerAddress"));
 		colMilkRate.setCellValueFactory(new PropertyValueFactory("milkRate"));
 		colPendingBill.setCellValueFactory(new PropertyValueFactory("billAmount"));
+		colTempo.setCellValueFactory(new PropertyValueFactory("tempoName"));
+		
 		
         Callback<TableColumn<MilkCustomer, Void>, TableCell<MilkCustomer, Void>> cellFactory = new Callback<TableColumn<MilkCustomer, Void>, TableCell<MilkCustomer, Void>>() {
             @Override

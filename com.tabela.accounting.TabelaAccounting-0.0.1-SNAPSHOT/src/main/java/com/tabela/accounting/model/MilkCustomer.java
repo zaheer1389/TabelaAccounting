@@ -60,6 +60,9 @@ public class MilkCustomer extends AbstractPojo implements Serializable {
 	
 	@JoinColumn(name="Tempo")
 	private Tempo tempo;
+	
+	@Transient
+	private String tempoName;
 
 	public Double getPendingBillAmount() {
 		return Double.valueOf(this.pendingBillAmount != null ? this.pendingBillAmount.doubleValue() : 0.0D);
@@ -164,6 +167,14 @@ public class MilkCustomer extends AbstractPojo implements Serializable {
 
 	public void setTempo(Tempo tempo) {
 		this.tempo = tempo;
+	}
+
+	public String getTempoName() {
+		return tempo.getTempoName();
+	}
+
+	public void setTempoName(String tempoName) {
+		this.tempoName = tempoName;
 	}
 	
 	

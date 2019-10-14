@@ -35,7 +35,7 @@
             </HBox>
          </children>
       </HBox>
-      <VBox fx:id="content" prefHeight="768.0" prefWidth="100.0" stylesheets="@../css/stylehseet.css" VBox.vgrow="ALWAYS">
+      <VBox fx:id="content" prefHeight="510.0" prefWidth="545.0" stylesheets="@../css/stylehseet.css" VBox.vgrow="ALWAYS">
          <children>
             <TableView fx:id="customerTable" minHeight="500.0" minWidth="500.0" prefHeight="354.0" prefWidth="737.0" VBox.vgrow="ALWAYS">
               <columns>
@@ -43,7 +43,8 @@
                 <TableColumn fx:id="colCreatedDate" prefWidth="95.0" text="Created On" />
                   <TableColumn fx:id="colCustomerAddress" prefWidth="75.0" text="Address" />
                   <TableColumn fx:id="colMilkRate" prefWidth="75.0" text="Milk Rate" />
-                  <TableColumn fx:id="colPendingBill" prefWidth="99.0" text="Pending Bill" />
+                  <TableColumn fx:id="colTempo" prefWidth="107.0" text="Tempo" />
+                  <TableColumn fx:id="colPendingBill" prefWidth="67.0" text="Pending Bill" />
                   <TableColumn fx:id="colActive" prefWidth="75.0" text="Deactive" />
                   <TableColumn fx:id="btnEdit" prefWidth="75.0" text="Edit" />
               </columns>

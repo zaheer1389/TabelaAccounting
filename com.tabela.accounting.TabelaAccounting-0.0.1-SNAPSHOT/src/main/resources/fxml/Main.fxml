@@ -62,6 +62,7 @@
             <Menu fx:id="menuReport" mnemonicParsing="false" text="Report">
               <items>
                 <MenuItem fx:id="menuReport_BillSheet" mnemonicParsing="false" onAction="#printBillSheet" text="Bill Sheet" />
+                  <MenuItem fx:id="menuReport_ProfitLossReport" mnemonicParsing="false" onAction="#profitLossReport" text="Profit/Loss Report" />
               </items>
             </Menu>
         <Menu fx:id="menuHelp" mnemonicParsing="false" text="Help">

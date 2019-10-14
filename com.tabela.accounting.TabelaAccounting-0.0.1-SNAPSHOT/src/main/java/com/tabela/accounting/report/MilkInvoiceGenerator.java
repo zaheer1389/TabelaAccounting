@@ -259,7 +259,7 @@ public class MilkInvoiceGenerator {
 	public double getPrevMilkSellTillDate(MilkCustomer customer){
 		String date = new SimpleDateFormat("yyyy-MM-dd").format(fromDate);
 		String queryStr = "select sum(EveningMilk*MilkRate+ MorningMilk*MilkRate) from CustomerMilk "
-				+ "WHERE CustomerId = "+customer.getId()+" and MilkDate < '"+date+"'";
+				+ "WHERE CustomerId = "+customer.getId()+" and MilkDate < "+fromDate.getTime()+"";
 		System.out.println("query : "+queryStr);
 		EntityManager em = JPAFacade.getEntityManager();
 		Query query = em.createNativeQuery(queryStr);
@@ -271,7 +271,7 @@ public class MilkInvoiceGenerator {
 	public double getPrevPaymentReceivedTillDate(MilkCustomer customer){
 		String date = new SimpleDateFormat("yyyy-MM-dd").format(fromDate);
 		String queryStr = "SELECT sum(Amount) FROM MilkPayment "
-				+ "WHERE CustomerId = "+customer.getId()+" and PaymentDate < '"+date+"'";
+				+ "WHERE CustomerId = "+customer.getId()+" and PaymentDate < "+fromDate.getTime()+"";
 		System.out.println("query : "+queryStr);
 		EntityManager em = JPAFacade.getEntityManager();
 		Query query = em.createNativeQuery(queryStr);
