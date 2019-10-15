@@ -91,11 +91,11 @@ public class ProfitLossReportGenerator {
 			preface.setAlignment(Element.ALIGN_CENTER);
 			document.add(preface);
 			
-			PdfContentByte contentByte = writer.getDirectContent();
+			/*PdfContentByte contentByte = writer.getDirectContent();
 	        contentByte.setLineWidth(1);
 	        contentByte.moveTo(document.getPageSize().getWidth()/2, 80);
 	        contentByte.lineTo(document.getPageSize().getWidth()/2, document.getPageSize().getHeight()-130);
-	        contentByte.stroke();
+	        contentByte.stroke();*/
 	        
 	        openingBal += getTotalMilkPaymentBeforeDate(fromDate);
 	        openingBal -= getTotalMerchantPaymentBeforeDate(fromDate);

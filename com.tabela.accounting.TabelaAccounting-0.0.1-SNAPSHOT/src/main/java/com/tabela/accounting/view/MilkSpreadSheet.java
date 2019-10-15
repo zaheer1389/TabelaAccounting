@@ -71,7 +71,7 @@ public class MilkSpreadSheet extends VBox {
 		hBox.setAlignment(Pos.CENTER);
 		hBox.setPrefHeight(70.0D);
 
-		dt = new DatePicker(LocalDate.now().minusDays(7L));
+		dt = new DatePicker(LocalDate.now().minusDays(6L));
 		hBox.getChildren().add(dt);
 
 		dt2 = new DatePicker(LocalDate.now());
@@ -107,17 +107,34 @@ public class MilkSpreadSheet extends VBox {
 		
 		pi = new ProgressIndicator(0.0D);
 		pi.setProgress(0.0D);
-
-		dt2.setOnAction(new EventHandler<ActionEvent>() {
-			public void handle(ActionEvent arg0) {
-				int days = Period.between((LocalDate) dt.getValue(),
-						(LocalDate) dt2.getValue()).getDays();
-				if (days > 7) {
-					dt2.setValue(((LocalDate) dt.getValue()).plusDays(6L));
+		
+		dt.setOnAction(new EventHandler<ActionEvent>() {
+			
+			@Override
+			public void handle(ActionEvent event) {
+				// TODO Auto-generated method stub
+				DatePicker datePicker = (DatePicker)event.getSource();
+				if(datePicker.getValue().isAfter(LocalDate.now())){
+					datePicker.setValue(LocalDate.now().minusDays(6L));
+					dt2.setValue(datePicker.getValue().plusDays(6));
+					return;
 				}
+				dt2.setValue(datePicker.getValue().plusDays(6));
 			}
 		});
-		dt.setValue(LocalDate.now().minusDays(7L));
+
+		dt2.setOnAction(new EventHandler<ActionEvent>() {
+			public void handle(ActionEvent event) {
+				DatePicker datePicker = (DatePicker)event.getSource();
+				if(datePicker.getValue().isAfter(LocalDate.now())){
+					dt.setValue(LocalDate.now().minusDays(6L));
+					datePicker.setValue(LocalDate.now());
+					return;
+				}
+				dt.setValue(datePicker.getValue().minusDays(6L));
+			}
+		});
+		dt.setValue(LocalDate.now().minusDays(6L));
 		getChildren().add(hBox);
 	}
 
@@ -315,6 +332,10 @@ public class MilkSpreadSheet extends VBox {
 		sheet.setPadding(new Insets(10.0D));
 		sheet.setMinHeight(screen.getHeight() - 150);
 		getChildren().add(sheet);
+		
+		sheet.getColumns().get(0).setFixed(true);
+		sheet.getColumns().get(1).setFixed(true);
+		sheet.getColumns().get(2).setFixed(true);
 
 		stage.close();
 	}
