@@ -24,6 +24,7 @@ import com.itextpdf.text.Rectangle;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
+import com.tabela.accounting.TabelaAccounting;
 import com.tabela.accounting.controllers.TempoController;
 import com.tabela.accounting.model.CustomerMilk;
 import com.tabela.accounting.model.MilkCustomer;
@@ -55,7 +56,7 @@ public class HeilReportGenerator {
 		document = new Document();
 		try {
 			document.setMargins(15, 15, 10, 15);
-			PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream(System.getProperty("user.home")+"/Tabela Accounting/HeilReport.pdf"));
+			PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream(TabelaAccounting.getReportDirectory()+"HeilReport.pdf"));
 			document.open();
 			
 			
@@ -116,7 +117,7 @@ public class HeilReportGenerator {
 			document.close();
 			writer.close();
 			
-			return new File(System.getProperty("user.home")+"/Tabela Accounting/HeilReport.pdf");
+			return new File(TabelaAccounting.getReportDirectory()+"HeilReport.pdf");
 		} catch (DocumentException e) {
 			e.printStackTrace();
 			return null;

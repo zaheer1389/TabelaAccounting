@@ -22,6 +22,7 @@ import com.itextpdf.text.Phrase;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
+import com.tabela.accounting.TabelaAccounting;
 import com.tabela.accounting.model.MilkCustomer;
 import com.tabela.accounting.persistence.JPAFacade;
 
@@ -47,13 +48,13 @@ public class MilkAccountSheetGenerator {
 		document = new Document();
 		try {
 			document.setMargins(15, 15, 10, 15);
-			PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream(System.getProperty("user.home")+"/Tabela Accounting/MilkAccountSheet.pdf"));
+			PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream(TabelaAccounting.getReportDirectory()+"MilkAccountSheet.pdf"));
 			document.open();
 			process();
 			document.close();
 			writer.close();
 			
-			return new File(System.getProperty("user.home")+"/Tabela Accounting/MilkAccountSheet.pdf");
+			return new File(TabelaAccounting.getReportDirectory()+"MilkAccountSheet.pdf");
 		} catch (Exception e) {
 			e.printStackTrace();
 			return null;

@@ -8,6 +8,7 @@ import java.util.Map;
 import java.util.ResourceBundle;
 
 import com.tabela.accounting.TabelaAccounting;
+import com.tabela.accounting.controllers.AddMilkCustomerController.CustomerInvoiceType;
 import com.tabela.accounting.controls.FXOptionPane;
 import com.tabela.accounting.enums.DialogType;
 import com.tabela.accounting.model.MilkCustomer;
@@ -243,6 +244,15 @@ public class MilkCustomerController implements Initializable {
 	public static List<MilkCustomer> getActiveCustomers() {
 		String queryStr = "Select c from MilkCustomer as c where c.active = false ";
 		List<MilkCustomer> l = FacadeFactory.getFacade().list(queryStr, null);
+		return l;
+	}
+	
+	public static List<MilkCustomer> getActiveCustomers(CustomerInvoiceType customerInvoiceType) {
+		Map<String, Object> parameters = new HashMap<String, Object>();
+		parameters.put("customerInvoiceType", customerInvoiceType);
+		
+		String queryStr = "Select c from MilkCustomer as c where c.active = false AND c.customerInvoiceType = :customerInvoiceType";
+		List<MilkCustomer> l = FacadeFactory.getFacade().list(queryStr, parameters);
 		return l;
 	}
 	

@@ -20,6 +20,7 @@ import com.tabela.accounting.util.AppUtil;
 import com.tabela.accounting.util.DialogFactory;
 import com.tabela.accounting.view.MilkSpreadSheet;
 import com.tabela.accounting.view.DateRangeLayout;
+import com.tabela.accounting.view.DateRangeLayoutWithCustomerInvoiceType;
 import com.tabela.accounting.view.MilkInvoiceLayout;
 
 import javafx.application.HostServices;
@@ -441,11 +442,11 @@ public class MainController implements Initializable {
     
     @FXML
     void printBillSheet(ActionEvent event) {
-    	DateRangeLayout dateRangeLayout = new DateRangeLayout();
+    	DateRangeLayoutWithCustomerInvoiceType dateRangeLayout = new DateRangeLayoutWithCustomerInvoiceType();
     	dateRangeLayout.getBtnReport().setOnAction(new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent arg0) {
 				try {
-					List<MilkCustomer> customers = MilkCustomerController.getActiveCustomers();
+					List<MilkCustomer> customers = MilkCustomerController.getActiveCustomers(dateRangeLayout.getCmbCustomerType().getValue());
 					File report = new MilkAccountSheetGenerator().generate(customers, AppUtil.toUtilDate((LocalDate) dateRangeLayout.getFromDate().getValue()),
 							AppUtil.toUtilDate((LocalDate) dateRangeLayout.getToDate().getValue()));
 					if(report != null){

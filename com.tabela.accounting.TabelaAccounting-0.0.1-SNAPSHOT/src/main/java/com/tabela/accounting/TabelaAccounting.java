@@ -1,14 +1,18 @@
 package com.tabela.accounting;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.net.URISyntaxException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.util.Properties;
 
 import javax.persistence.EntityManager;
+
+import org.eclipse.jdt.internal.compiler.batch.Main;
 
 import com.tabela.accounting.controllers.MainController;
 import com.tabela.accounting.model.Branch;
@@ -72,6 +76,22 @@ public class TabelaAccounting extends Application {
 	{
 		Screen screen = Screen.getPrimary();
 		return screen.getBounds();
+	}
+	
+	public static String getReportDirectory(){
+		try {
+			File jarFile = new File(TabelaAccounting.class.getProtectionDomain().getCodeSource().getLocation().toURI().getPath());
+			String inputFilePath = jarFile.getParent() + File.separator + "Reports/"; 
+			if(!new File(inputFilePath).exists()){
+				new File(inputFilePath).mkdir();
+			}
+	        return inputFilePath;
+		} catch (URISyntaxException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
+		}
+        
 	}
 
 	public static Properties getProperties() {

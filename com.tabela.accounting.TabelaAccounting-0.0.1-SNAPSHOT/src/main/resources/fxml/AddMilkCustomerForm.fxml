@@ -25,6 +25,7 @@
             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
         </rowConstraints>
          <VBox.margin>
             <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
@@ -38,7 +39,7 @@
             <TextField fx:id="txtCustomerAddress" GridPane.columnIndex="1" GridPane.rowIndex="1" />
             <TextField fx:id="txtMilkRate" GridPane.columnIndex="1" GridPane.rowIndex="2" />
             <TextField fx:id="txtPendingBillAmount" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-            <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" spacing="30.0" GridPane.columnIndex="1" GridPane.rowIndex="5">
+            <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" spacing="30.0" GridPane.columnIndex="1" GridPane.rowIndex="6">
                <children>
                   <Button fx:id="btnSave" mnemonicParsing="false" onAction="#saveCustomer" text="Save" />
                   <Button fx:id="btnResetForm" mnemonicParsing="false" onAction="#resetForm" text="Reset Form" />
@@ -46,6 +47,8 @@
             </HBox>
             <Label text="Tempo :" GridPane.rowIndex="4" />
             <ComboBox fx:id="cmbTempo" prefHeight="26.0" prefWidth="228.0" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+            <Label prefHeight="38.0" prefWidth="200.0" text="Customer Invoice Generation Type :" textOverrun="CLIP" wrapText="true" GridPane.rowIndex="5" />
+            <ComboBox fx:id="cmbCustomerType" prefHeight="26.0" prefWidth="228.0" GridPane.columnIndex="1" GridPane.rowIndex="5" />
          </children>
       </GridPane>
    </children>

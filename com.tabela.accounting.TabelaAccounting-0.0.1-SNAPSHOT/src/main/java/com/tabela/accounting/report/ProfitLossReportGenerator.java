@@ -26,6 +26,7 @@ import com.itextpdf.text.pdf.PdfPCellEvent;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
 import com.lowagie.text.Chunk;
+import com.tabela.accounting.TabelaAccounting;
 import com.tabela.accounting.model.MilkCustomer;
 import com.tabela.accounting.persistence.JPAFacade;
 
@@ -60,13 +61,13 @@ public class ProfitLossReportGenerator {
 		document = new Document();
 		try {
 			document.setMargins(15, 15, 10, 15);
-			writer = PdfWriter.getInstance(document, new FileOutputStream(System.getProperty("user.home")+"/Tabela Accounting/ProfitLossReport.pdf"));
+			writer = PdfWriter.getInstance(document, new FileOutputStream(TabelaAccounting.getReportDirectory()+"ProfitLossReport.pdf"));
 			document.open();
 			process();
 			document.close();
 			writer.close();
 			
-			return new File(System.getProperty("user.home")+"/Tabela Accounting/ProfitLossReport.pdf");
+			return new File(TabelaAccounting.getReportDirectory()+"ProfitLossReport.pdf");
 			
 		} catch (Exception e) {
 			e.printStackTrace();

@@ -23,6 +23,8 @@ import javafx.stage.Stage;
 import javafx.util.StringConverter;
 
 public class AddMilkCustomerController implements Initializable{
+	
+	public enum CustomerInvoiceType {weekly, monthly};
 
 	@FXML
 	private VBox root;
@@ -41,6 +43,9 @@ public class AddMilkCustomerController implements Initializable{
     
     @FXML
     private ComboBox<Tempo> cmbTempo;
+    
+    @FXML
+    private ComboBox<CustomerInvoiceType> cmbCustomerType;
 
     @FXML
     private Button btnSave;
@@ -69,6 +74,22 @@ public class AddMilkCustomerController implements Initializable{
 				// TODO Auto-generated method stub
 				return cmbTempo.getItems().stream().filter(customer -> 
 								customer.getTempoName().equals(string)).findFirst().orElse(null);
+			}
+		});
+    	
+    	cmbCustomerType.setItems(FXCollections.observableArrayList(CustomerInvoiceType.values()));
+    	cmbCustomerType.setConverter(new StringConverter<CustomerInvoiceType>() {
+			
+			@Override
+			public String toString(CustomerInvoiceType object) {
+				// TODO Auto-generated method stub
+				return object.toString();
+			}
+			
+			@Override
+			public CustomerInvoiceType fromString(String string) {
+				// TODO Auto-generated method stub
+				return null;
 			}
 		});
 		
@@ -121,6 +142,11 @@ public class AddMilkCustomerController implements Initializable{
     		return;
     	}
     	
+    	if(cmbCustomerType.getValue() == null){
+    		DialogFactory.showErrorDialog("Please select customer type", stage);
+    		return;
+    	}
+    	
     	if(customer == null){
     		customer = new MilkCustomer();
     	}
@@ -130,6 +156,7 @@ public class AddMilkCustomerController implements Initializable{
     	customer.setMilkRate(Double.parseDouble(txtMilkRate.getText()));
     	customer.setBillAmount(Double.parseDouble(txtPendingBillAmount.getText()));
     	customer.setTempo(cmbTempo.getValue());
+    	customer.setCustomerInvoiceType(cmbCustomerType.getValue());
     	FacadeFactory.getFacade().store(customer);
     	
     	DialogFactory.showInformationDialog("Customer saved successfully", TabelaAccounting.stage);
@@ -144,13 +171,15 @@ public class AddMilkCustomerController implements Initializable{
 	    	txtMilkRate.setText("");
 	    	txtPendingBillAmount.setText("");
 	    	cmbTempo.setValue(null);
+	    	cmbCustomerType.setValue(null);
     	}
     	else{
     		txtCustomerName.setText(customer.getCustomerName());
 	    	txtCustomerAddress.setText(customer.getCustomerAddress());
 	    	txtMilkRate.setText(customer.getMilkRate()+"");
-	    	txtPendingBillAmount.setText(customer.getPendingBillAmount()+"");
+	    	txtPendingBillAmount.setText(customer.getBillAmount()+"");
 	    	cmbTempo.setValue(customer.getTempo());
+	    	cmbCustomerType.setValue(customer.getCustomerInvoiceType());
     	}
     }
 

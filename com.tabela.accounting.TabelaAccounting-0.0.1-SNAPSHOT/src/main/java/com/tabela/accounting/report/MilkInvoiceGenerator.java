@@ -24,6 +24,7 @@ import com.itextpdf.text.Rectangle;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
+import com.tabela.accounting.TabelaAccounting;
 import com.tabela.accounting.model.CustomerMilk;
 import com.tabela.accounting.model.MilkCustomer;
 import com.tabela.accounting.persistence.FacadeFactory;
@@ -53,7 +54,7 @@ public class MilkInvoiceGenerator {
 		document = new Document();
 		try {
 			document.setMargins(15, 15, 10, 15);
-			PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream(System.getProperty("user.home")+"/Tabela Accounting/MilkInvoices.pdf"));
+			PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream(TabelaAccounting.getReportDirectory()+"MilkInvoices.pdf"));
 			document.open();
 			int count = 1;
 			for(MilkCustomer customer : customers){
@@ -75,7 +76,7 @@ public class MilkInvoiceGenerator {
 			document.close();
 			writer.close();
 			
-			return new File(System.getProperty("user.home")+"/Tabela Accounting/MilkInvoices.pdf");
+			return new File(TabelaAccounting.getReportDirectory()+"MilkInvoices.pdf");
 		} catch (DocumentException e) {
 			e.printStackTrace();
 			return null;
@@ -122,7 +123,7 @@ public class MilkInvoiceGenerator {
 			System.out.println("Prev milk sell "+prevMilkSell);
 			double prevPaymentReceived = getPrevPaymentReceivedTillDate(customer);
 			System.out.println("prev payment received "+prevPaymentReceived);
-			double prevBalance = customer.getPendingBillAmount() + prevMilkSell - prevPaymentReceived;
+			double prevBalance = customer.getBillAmount() + prevMilkSell - prevPaymentReceived;
 			
 			double totalMilk = 0;
 			double totalMilkPrice = 0;
@@ -214,6 +215,7 @@ public class MilkInvoiceGenerator {
 	
 	public PdfPCell getHeaderCell(String text, int alignment, boolean headerCell, int border) {
 		Font font = headerCell ? header2BoldFont : header2Font;
+		font.setColor(BaseColor.WHITE);
 		Phrase phrase = new Phrase(text, font);
 	    PdfPCell cell = new PdfPCell(phrase);
 	    cell.setFixedHeight(headerCell ? 30 : 20);
@@ -221,7 +223,7 @@ public class MilkInvoiceGenerator {
 	    cell.setPadding(1);
 	    cell.setHorizontalAlignment(alignment);
 	    cell.setVerticalAlignment(PdfPCell.ALIGN_MIDDLE);
-	    cell.setBackgroundColor(BaseColor.GRAY);
+	    cell.setBackgroundColor(new BaseColor(92, 157, 129));
 	    
 	    if(border == 1){
 	    	cell.setBorder(PdfPCell.NO_BORDER);
@@ -248,7 +250,7 @@ public class MilkInvoiceGenerator {
 	}
 	
 	public List<CustomerMilk> getMilks(MilkCustomer customer){
-		String queryStr = "Select c from CustomerMilk as c where c.customer = :customer and c.milkDate between :fromDate and :toDate";
+		String queryStr = "Select c from CustomerMilk as c where c.customer = :customer and c.milkDate between :fromDate and :toDate order by c.milkDate asc";
 		Map<String, Object> parameters = new HashMap();
 		parameters.put("customer", customer);
 		parameters.put("fromDate", fromDate);
