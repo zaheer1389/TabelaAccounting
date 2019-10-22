@@ -107,13 +107,13 @@ public class MilkInvoiceGenerator {
 			table.addCell(getCell("Address : "+customer.getCustomerAddress(), PdfPCell.ALIGN_LEFT));
 			document.add(table);
 			
-			table = new PdfPTable(6);
+			table = new PdfPTable(5);
 			table.setSpacingBefore(10);
 			table.setSpacingAfter(11);
 			table.setWidthPercentage(100);
 			
 			table.addCell(getHeaderCell("  Milk Date", PdfPCell.ALIGN_LEFT, true, 0));
-			table.addCell(getHeaderCell("  Milk Rate", PdfPCell.ALIGN_LEFT, true, 0));
+			//table.addCell(getHeaderCell("  Milk Rate", PdfPCell.ALIGN_LEFT, true, 0));
 			table.addCell(getHeaderCell("Morning Milk(ltrs)", PdfPCell.ALIGN_CENTER, true, 0));
 			table.addCell(getHeaderCell("Evening Milk(ltrs)", PdfPCell.ALIGN_CENTER, true, 0));
 			table.addCell(getHeaderCell("Total Milk(ltrs)", PdfPCell.ALIGN_CENTER, true, 0));
@@ -131,7 +131,7 @@ public class MilkInvoiceGenerator {
 			double totalEveningMilk = 0;
 			for(CustomerMilk milk : milks){
 				table.addCell(getItemCell("  "+new SimpleDateFormat("dd-MMM-yyyy").format(milk.getMilkDate()), PdfPCell.ALIGN_LEFT, false, 0));
-				table.addCell(getItemCell("  "+milk.getMilkRate()+"", PdfPCell.ALIGN_LEFT, false, 0));
+				//table.addCell(getItemCell("  "+milk.getMilkRate()+"", PdfPCell.ALIGN_LEFT, false, 0));
 				table.addCell(getItemCell(milk.getMorningMilk()+"", PdfPCell.ALIGN_CENTER, false, 0));
 				table.addCell(getItemCell(milk.getEveningMilk()+"", PdfPCell.ALIGN_CENTER, false, 0));
 				
@@ -148,12 +148,12 @@ public class MilkInvoiceGenerator {
 				table.addCell(getItemCell(dayTotalPrice+"", PdfPCell.ALIGN_CENTER, false, 0));
 			}
 			
-			table.addCell(getFooterCell("  ", PdfPCell.ALIGN_LEFT, true, 1));
-			table.addCell(getFooterCell("  ", PdfPCell.ALIGN_LEFT, true, 1));
-			table.addCell(getFooterCell(totalMorningMilk+"", PdfPCell.ALIGN_CENTER, true, 0));
-			table.addCell(getFooterCell(totalEveningMilk+"", PdfPCell.ALIGN_CENTER, true, 0));
-			table.addCell(getFooterCell(totalMilk+"", PdfPCell.ALIGN_CENTER, true, 0));
-			table.addCell(getFooterCell(totalMilkPrice+"", PdfPCell.ALIGN_CENTER, true, 0));
+			//table.addCell(getFooterCell("  ", PdfPCell.ALIGN_LEFT, true, 1));
+			//table.addCell(getFooterCell("  ", PdfPCell.ALIGN_LEFT, true, 1));
+			//table.addCell(getFooterCell(totalMorningMilk+"", PdfPCell.ALIGN_CENTER, true, 0));
+			//table.addCell(getFooterCell(totalEveningMilk+"", PdfPCell.ALIGN_CENTER, true, 0));
+			//table.addCell(getFooterCell(totalMilk+"", PdfPCell.ALIGN_CENTER, true, 0));
+			//table.addCell(getFooterCell(totalMilkPrice+"", PdfPCell.ALIGN_CENTER, true, 0));
 			
 			document.add(table);
 			
