@@ -73,3 +73,9 @@
 	-fx-pref-width: 0px;
 	-fx-min-width: 0px;
 }
+
+
+/***************************Bar chart******************************/
+
+.default-color0.chart-bar { -fx-bar-fill: Crimson; }
+.default-color1.chart-bar { -fx-bar-fill: LightSalmon; }

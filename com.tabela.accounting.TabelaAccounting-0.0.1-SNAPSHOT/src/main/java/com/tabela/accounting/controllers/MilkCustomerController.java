@@ -8,8 +8,9 @@ import java.util.Map;
 import java.util.ResourceBundle;
 
 import com.tabela.accounting.TabelaAccounting;
-import com.tabela.accounting.controllers.AddMilkCustomerController.CustomerInvoiceType;
 import com.tabela.accounting.controls.FXOptionPane;
+import com.tabela.accounting.enums.CustomerInvoiceType;
+import com.tabela.accounting.enums.CustomerType;
 import com.tabela.accounting.enums.DialogType;
 import com.tabela.accounting.model.MilkCustomer;
 import com.tabela.accounting.persistence.FacadeFactory;
@@ -72,6 +73,12 @@ public class MilkCustomerController implements Initializable {
 	
 	@FXML
 	private TableColumn colTempo;
+	
+	@FXML
+	private TableColumn colCustomerType;
+	
+	@FXML
+	private TableColumn colBillingType;
 
 	@FXML
 	private TableColumn colPendingBill;
@@ -119,6 +126,8 @@ public class MilkCustomerController implements Initializable {
 		colMilkRate.setCellValueFactory(new PropertyValueFactory("milkRate"));
 		colPendingBill.setCellValueFactory(new PropertyValueFactory("billAmount"));
 		colTempo.setCellValueFactory(new PropertyValueFactory("tempoName"));
+		colCustomerType.setCellValueFactory(new PropertyValueFactory("customerType"));
+		colBillingType.setCellValueFactory(new PropertyValueFactory("customerInvoiceType"));
 		
 		
         Callback<TableColumn<MilkCustomer, Void>, TableCell<MilkCustomer, Void>> cellFactory = new Callback<TableColumn<MilkCustomer, Void>, TableCell<MilkCustomer, Void>>() {
@@ -241,17 +250,38 @@ public class MilkCustomerController implements Initializable {
 		}
 	}
 	
-	public static List<MilkCustomer> getActiveCustomers() {
-		String queryStr = "Select c from MilkCustomer as c where c.active = false ";
+	public static List<MilkCustomer> getCustomers(boolean active) {
+		String queryStr = "Select c from MilkCustomer as c where c.active = "+active;
 		List<MilkCustomer> l = FacadeFactory.getFacade().list(queryStr, null);
 		return l;
 	}
 	
-	public static List<MilkCustomer> getActiveCustomers(CustomerInvoiceType customerInvoiceType) {
+	
+	public static List<MilkCustomer> getCustomers(boolean active, CustomerType customerType) {
+		Map<String, Object> parameters = new HashMap<String, Object>();
+		parameters.put("customerType", customerType);
+		
+		String queryStr = "Select c from MilkCustomer as c where c.active = "+active+" AND c.customerType = :customerType";
+		List<MilkCustomer> l = FacadeFactory.getFacade().list(queryStr, parameters);
+		return l;
+	}
+	
+	public static List<MilkCustomer> getCustomers(boolean active, CustomerInvoiceType customerInvoiceType) {
 		Map<String, Object> parameters = new HashMap<String, Object>();
 		parameters.put("customerInvoiceType", customerInvoiceType);
 		
-		String queryStr = "Select c from MilkCustomer as c where c.active = false AND c.customerInvoiceType = :customerInvoiceType";
+		String queryStr = "Select c from MilkCustomer as c where c.active = "+active+" AND c.customerInvoiceType = :customerInvoiceType";
+		List<MilkCustomer> l = FacadeFactory.getFacade().list(queryStr, parameters);
+		return l;
+	}
+	
+	public static List<MilkCustomer> getCustomers(boolean active, CustomerType customerType, CustomerInvoiceType customerInvoiceType) {
+		Map<String, Object> parameters = new HashMap<String, Object>();
+		parameters.put("customerType", customerType);
+		parameters.put("customerInvoiceType", customerInvoiceType);
+		
+		String queryStr = "Select c from MilkCustomer as c where c.active = "+active+" AND c.customerType = :customerType "
+				+ "AND c.customerInvoiceType = :customerInvoiceType";
 		List<MilkCustomer> l = FacadeFactory.getFacade().list(queryStr, parameters);
 		return l;
 	}

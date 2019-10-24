@@ -27,6 +27,7 @@ import com.tabela.accounting.model.CustomerMilk;
 import com.tabela.accounting.model.MilkCustomer;
 import com.tabela.accounting.persistence.FacadeFactory;
 import com.tabela.accounting.util.AppUtil;
+import com.tabela.accounting.util.DialogFactory;
 
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
@@ -40,6 +41,7 @@ import javafx.geometry.Pos;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressIndicator;
@@ -47,6 +49,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.util.StringConverter;
 
 public class MilkSpreadSheet extends VBox {
 	SpreadsheetView sheet;
@@ -75,20 +78,48 @@ public class MilkSpreadSheet extends VBox {
 		hBox.getChildren().add(dt);
 
 		dt2 = new DatePicker(LocalDate.now());
-
 		hBox.getChildren().add(dt2);
+		
+		ComboBox<CustomerType> cmbType = new ComboBox<>();
+		hBox.getChildren().add(cmbType);
+		
+		cmbType.setItems(FXCollections.observableArrayList(CustomerType.values()));
+		cmbType.setValue(CustomerType.SALE);
+		cmbType.setConverter(new StringConverter<CustomerType>() {
+			
+			@Override
+			public String toString(CustomerType object) {
+				// TODO Auto-generated method stub
+				return object.toString();
+			}
+			
+			@Override
+			public CustomerType fromString(String string) {
+				// TODO Auto-generated method stub
+				return null;
+			}
+		});
 
 		Button btnShowSheet = new Button("Show Milk");
 		btnShowSheet.setOnAction(new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent arg0) {
-				String queryStr = "Select c from CustomerMilk as c where c.milkDate between :fromDate and :toDate";
+				if(cmbType.getValue() == null){
+					DialogFactory.showErrorDialog("Please select the customer type", stage);
+					return;
+				}
+				
+				String queryStr = "Select c from CustomerMilk as cm join cm.customer as c "
+						+ "where cm.milkDate between :fromDate and :toDate "
+						+ "AND c.customerType = :customerType";
+				
 				Map<String, Object> parameters = new HashMap();
-				parameters.put("fromDate",
-						new Timestamp(AppUtil.toUtilDate((LocalDate) dt.getValue()).getTime()));
-				parameters.put("toDate",
-						new Timestamp(AppUtil.toUtilDate((LocalDate) dt2.getValue()).getTime()));
+				parameters.put("fromDate",new Timestamp(AppUtil.toUtilDate((LocalDate) dt.getValue()).getTime()));
+				parameters.put("toDate",new Timestamp(AppUtil.toUtilDate((LocalDate) dt2.getValue()).getTime()));
+				parameters.put("customerType", cmbType.getValue());
+				
 				milks = FacadeFactory.getFacade().list(queryStr, parameters);
-				initSpreadsheet();
+				
+				initSpreadsheet(cmbType.getValue());
 			}
 		});
 		hBox.getChildren().add(btnShowSheet);
@@ -138,13 +169,13 @@ public class MilkSpreadSheet extends VBox {
 		getChildren().add(hBox);
 	}
 
-	public void initSpreadsheet() {
+	public void initSpreadsheet(CustomerType customerType) {
 		getChildren().remove(sheet);
 
 		Stage stage = getStage();
 		stage.show();
 		
-		List<MilkCustomer> list = MilkCustomerController.getActiveCustomers();
+		List<MilkCustomer> list = MilkCustomerController.getCustomers(false, customerType);
 		int days = Period.between((LocalDate) dt.getValue(), (LocalDate) dt2.getValue()).getDays();
 		int columnCount = 5 + days * 2;
 		int rowCount = list.size() + 3;

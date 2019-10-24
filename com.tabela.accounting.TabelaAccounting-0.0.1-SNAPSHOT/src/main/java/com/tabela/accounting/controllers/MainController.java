@@ -11,20 +11,18 @@ import java.util.ResourceBundle;
 import com.tabela.accounting.TabelaAccounting;
 import com.tabela.accounting.model.MilkCustomer;
 import com.tabela.accounting.model.Tempo;
-import com.tabela.accounting.persistence.FacadeFactory;
 import com.tabela.accounting.report.HeilReportGenerator;
 import com.tabela.accounting.report.MilkAccountSheetGenerator;
 import com.tabela.accounting.report.MilkInvoiceGenerator;
 import com.tabela.accounting.report.ProfitLossReportGenerator;
 import com.tabela.accounting.util.AppUtil;
 import com.tabela.accounting.util.DialogFactory;
-import com.tabela.accounting.view.MilkSpreadSheet;
+import com.tabela.accounting.view.AvgMilkView;
 import com.tabela.accounting.view.DateRangeLayout;
-import com.tabela.accounting.view.DateRangeLayoutWithCustomerInvoiceType;
-import com.tabela.accounting.view.MilkInvoiceLayout;
+import com.tabela.accounting.view.MilkInvoiceSelectionLayout;
+import com.tabela.accounting.view.MilkSpreadSheet;
 
 import javafx.application.HostServices;
-import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -32,13 +30,11 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.ListCell;
-import javafx.scene.control.ListView;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
-import javafx.scene.control.SelectionMode;
 import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -135,10 +131,10 @@ public class MainController implements Initializable {
     private Label lblPageTitle;
 
     @FXML
-    private Label lblDate;
-
-    @FXML
     private VBox content;
+    
+    @FXML
+    private Button btnDashboard;
     
     Stage window;
     
@@ -157,9 +153,10 @@ public class MainController implements Initializable {
         window = TabelaAccounting.stage;
         root.prefWidthProperty().bind(window.widthProperty().multiply(0.80));
         
-        lblDate.setText(new Date()+"");
         lblPageTitle.setText("");
         
+        content.getChildren().clear();
+		content.getChildren().add(new AvgMilkView());
     }
 
     @FXML
@@ -170,6 +167,14 @@ public class MainController implements Initializable {
     @FXML
     void changeLangToGujarati(ActionEvent event) {
 
+    }
+    
+    @FXML
+    void dashboard(ActionEvent event) {
+    	lblPageTitle.setText("Dashboard :: Avg Milk Rate");
+        
+        content.getChildren().clear();
+		content.getChildren().add(new AvgMilkView());
     }
 
     @FXML
@@ -229,15 +234,12 @@ public class MainController implements Initializable {
     
     @FXML
     void printAllCustomerBill(ActionEvent event) {
-		MilkInvoiceLayout root = new MilkInvoiceLayout();
-
-		final ListView<MilkCustomer> listView = getMilkCustomerListView();
-		root.getChildren().add(2, listView);
+    	MilkInvoiceSelectionLayout root = new MilkInvoiceSelectionLayout(false);
 
 		root.getBtnReport().setOnAction(new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent arg0) {
 				try {
-					List<MilkCustomer> customers = listView.getSelectionModel().getSelectedItems();
+					List<MilkCustomer> customers = root.getListView().getSelectionModel().getSelectedItems();
 					File report = new MilkInvoiceGenerator().generate(customers, AppUtil.toUtilDate((LocalDate) root.getFromDate().getValue()),
 							AppUtil.toUtilDate((LocalDate) root.getToDate().getValue()));
 					if(report != null){
@@ -264,15 +266,12 @@ public class MainController implements Initializable {
 
     @FXML
     void printCustomerWiseBill(ActionEvent event) {
-    	MilkInvoiceLayout root = new MilkInvoiceLayout();
-
-		final ListView<MilkCustomer> listView = getMilkCustomerListView();
-		root.getChildren().add(2, listView);
+    	MilkInvoiceSelectionLayout root = new MilkInvoiceSelectionLayout(false);
 
 		root.getBtnReport().setOnAction(new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent arg0) {
 				try {
-					List<MilkCustomer> customers = listView.getSelectionModel().getSelectedItems();
+					List<MilkCustomer> customers = root.getListView().getSelectionModel().getSelectedItems();
 					File report = new MilkInvoiceGenerator().generate(customers, AppUtil.toUtilDate((LocalDate) root.getFromDate().getValue()),
 							AppUtil.toUtilDate((LocalDate) root.getToDate().getValue()));
 					if(report != null){
@@ -296,26 +295,6 @@ public class MainController implements Initializable {
 		//stage.setY(100.0D);
 		stage.show();
     }
-    
-	public ListView<MilkCustomer> getMilkCustomerListView() {
-		ListView<MilkCustomer> listView = new ListView();
-		listView.getItems().addAll(FXCollections.observableArrayList(FacadeFactory.getFacade().list(MilkCustomer.class)));
-		listView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
-
-		listView.setCellFactory(customer -> new ListCell<MilkCustomer>() {
-		    @Override
-		    protected void updateItem(MilkCustomer item, boolean empty) {
-		        super.updateItem(item, empty);
-
-		        if (empty || item == null || item.getCustomerName() == null) {
-		            setText(null);
-		        } else {
-		            setText(item.getCustomerName());
-		        }
-		    }
-		});
-		return listView;
-	}
 	
 	@FXML
     void expense(ActionEvent event) {
@@ -442,11 +421,11 @@ public class MainController implements Initializable {
     
     @FXML
     void printBillSheet(ActionEvent event) {
-    	DateRangeLayoutWithCustomerInvoiceType dateRangeLayout = new DateRangeLayoutWithCustomerInvoiceType();
+    	MilkInvoiceSelectionLayout dateRangeLayout = new MilkInvoiceSelectionLayout(true);
     	dateRangeLayout.getBtnReport().setOnAction(new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent arg0) {
 				try {
-					List<MilkCustomer> customers = MilkCustomerController.getActiveCustomers(dateRangeLayout.getCmbCustomerType().getValue());
+					List<MilkCustomer> customers = MilkCustomerController.getCustomers(false, dateRangeLayout.getCmbType().getValue(), dateRangeLayout.getCmbCustomerType().getValue());
 					File report = new MilkAccountSheetGenerator().generate(customers, AppUtil.toUtilDate((LocalDate) dateRangeLayout.getFromDate().getValue()),
 							AppUtil.toUtilDate((LocalDate) dateRangeLayout.getToDate().getValue()));
 					if(report != null){

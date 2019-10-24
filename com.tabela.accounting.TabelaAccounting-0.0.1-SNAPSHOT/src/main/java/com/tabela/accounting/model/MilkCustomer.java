@@ -12,7 +12,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
-import com.tabela.accounting.controllers.AddMilkCustomerController.CustomerInvoiceType;
+import com.tabela.accounting.enums.CustomerInvoiceType;
 import com.tabela.accounting.enums.CustomerType;
 import com.tabela.accounting.persistence.model.AbstractPojo;
 
@@ -53,6 +53,10 @@ public class MilkCustomer extends AbstractPojo implements Serializable {
 	@Enumerated(EnumType.STRING)
 	@Column(name = "CustomerInvoiceType")
 	CustomerInvoiceType customerInvoiceType;
+	
+	@Enumerated(EnumType.STRING)
+	@Column(name = "CustomerType")
+	CustomerType customerType;
 	
 	@Transient
 	private double billAmt;
@@ -175,7 +179,7 @@ public class MilkCustomer extends AbstractPojo implements Serializable {
 	}
 
 	public String getTempoName() {
-		return tempo.getTempoName();
+		return tempo != null ? tempo.getTempoName() : "";
 	}
 
 	public void setTempoName(String tempoName) {
@@ -188,6 +192,14 @@ public class MilkCustomer extends AbstractPojo implements Serializable {
 
 	public void setCustomerInvoiceType(CustomerInvoiceType customerInvoiceType) {
 		this.customerInvoiceType = customerInvoiceType;
+	}
+
+	public CustomerType getCustomerType() {
+		return customerType;
+	}
+
+	public void setCustomerType(CustomerType customerType) {
+		this.customerType = customerType;
 	}
 	
 	

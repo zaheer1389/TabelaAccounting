@@ -4,7 +4,8 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 import com.tabela.accounting.TabelaAccounting;
-import com.tabela.accounting.model.Merchant;
+import com.tabela.accounting.enums.CustomerInvoiceType;
+import com.tabela.accounting.enums.CustomerType;
 import com.tabela.accounting.model.MilkCustomer;
 import com.tabela.accounting.model.Tempo;
 import com.tabela.accounting.persistence.FacadeFactory;
@@ -24,8 +25,6 @@ import javafx.util.StringConverter;
 
 public class AddMilkCustomerController implements Initializable{
 	
-	public enum CustomerInvoiceType {weekly, monthly};
-
 	@FXML
 	private VBox root;
 	 
@@ -45,7 +44,10 @@ public class AddMilkCustomerController implements Initializable{
     private ComboBox<Tempo> cmbTempo;
     
     @FXML
-    private ComboBox<CustomerInvoiceType> cmbCustomerType;
+    private ComboBox<CustomerInvoiceType> cmbCustomerBillType;
+    
+    @FXML
+    private ComboBox<CustomerType> cmbCustomerType;
 
     @FXML
     private Button btnSave;
@@ -77,8 +79,8 @@ public class AddMilkCustomerController implements Initializable{
 			}
 		});
     	
-    	cmbCustomerType.setItems(FXCollections.observableArrayList(CustomerInvoiceType.values()));
-    	cmbCustomerType.setConverter(new StringConverter<CustomerInvoiceType>() {
+    	cmbCustomerBillType.setItems(FXCollections.observableArrayList(CustomerInvoiceType.values()));
+    	cmbCustomerBillType.setConverter(new StringConverter<CustomerInvoiceType>() {
 			
 			@Override
 			public String toString(CustomerInvoiceType object) {
@@ -88,6 +90,22 @@ public class AddMilkCustomerController implements Initializable{
 			
 			@Override
 			public CustomerInvoiceType fromString(String string) {
+				// TODO Auto-generated method stub
+				return null;
+			}
+		});
+    	
+    	cmbCustomerType.setItems(FXCollections.observableArrayList(CustomerType.values()));
+    	cmbCustomerType.setConverter(new StringConverter<CustomerType>() {
+			
+			@Override
+			public String toString(CustomerType object) {
+				// TODO Auto-generated method stub
+				return object.toString();
+			}
+			
+			@Override
+			public CustomerType fromString(String string) {
 				// TODO Auto-generated method stub
 				return null;
 			}
@@ -137,15 +155,24 @@ public class AddMilkCustomerController implements Initializable{
     		return;
     	}
     	
-    	if(cmbTempo.getValue() == null){
-    		DialogFactory.showErrorDialog("Please select tempo", stage);
-    		return;
-    	}
-    	
     	if(cmbCustomerType.getValue() == null){
     		DialogFactory.showErrorDialog("Please select customer type", stage);
     		return;
     	}
+    	
+    	if(cmbCustomerType.getValue() == CustomerType.SALE){
+	    	if(cmbTempo.getValue() == null){
+	    		DialogFactory.showErrorDialog("Please select tempo", stage);
+	    		return;
+	    	}
+	    	
+	    	if(cmbCustomerBillType.getValue() == null){
+	    		DialogFactory.showErrorDialog("Please select customer type", stage);
+	    		return;
+	    	}
+    	}
+    	
+    	
     	
     	if(customer == null){
     		customer = new MilkCustomer();
@@ -155,8 +182,9 @@ public class AddMilkCustomerController implements Initializable{
     	customer.setCustomerAddress(txtCustomerAddress.getText());
     	customer.setMilkRate(Double.parseDouble(txtMilkRate.getText()));
     	customer.setBillAmount(Double.parseDouble(txtPendingBillAmount.getText()));
+    	customer.setCustomerType(cmbCustomerType.getValue());
     	customer.setTempo(cmbTempo.getValue());
-    	customer.setCustomerInvoiceType(cmbCustomerType.getValue());
+    	customer.setCustomerInvoiceType(cmbCustomerBillType.getValue());
     	FacadeFactory.getFacade().store(customer);
     	
     	DialogFactory.showInformationDialog("Customer saved successfully", TabelaAccounting.stage);
@@ -170,16 +198,18 @@ public class AddMilkCustomerController implements Initializable{
 	    	txtCustomerAddress.setText("");
 	    	txtMilkRate.setText("");
 	    	txtPendingBillAmount.setText("");
-	    	cmbTempo.setValue(null);
 	    	cmbCustomerType.setValue(null);
+	    	cmbTempo.setValue(null);
+	    	cmbCustomerBillType.setValue(null);
     	}
     	else{
     		txtCustomerName.setText(customer.getCustomerName());
 	    	txtCustomerAddress.setText(customer.getCustomerAddress());
 	    	txtMilkRate.setText(customer.getMilkRate()+"");
 	    	txtPendingBillAmount.setText(customer.getBillAmount()+"");
+	    	cmbCustomerType.setValue(customer.getCustomerType());
 	    	cmbTempo.setValue(customer.getTempo());
-	    	cmbCustomerType.setValue(customer.getCustomerInvoiceType());
+	    	cmbCustomerBillType.setValue(customer.getCustomerInvoiceType());
     	}
     }
 

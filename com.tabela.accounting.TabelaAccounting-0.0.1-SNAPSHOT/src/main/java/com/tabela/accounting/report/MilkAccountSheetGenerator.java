@@ -87,7 +87,7 @@ public class MilkAccountSheetGenerator {
 			for(MilkCustomer customer : customers){
 				double prevMilkSell = getPrevMilkSellTillDate(customer);
 				double prevPaymentReceived = getPrevPaymentReceivedTillDate(customer);
-				double prevBalance = customer.getPendingBillAmount() + prevMilkSell - prevPaymentReceived;
+				double prevBalance = customer.getBillAmount() + prevMilkSell - prevPaymentReceived;
 				double currBill = getCurrentBillAmount(customer);
 				double total = currBill + prevBalance;
 				
@@ -164,7 +164,7 @@ public class MilkAccountSheetGenerator {
 	public double getPrevPaymentReceivedTillDate(MilkCustomer customer){
 		String date = new SimpleDateFormat("yyyy-MM-dd").format(fromDate);
 		String queryStr = "SELECT sum(Amount) FROM MilkPayment "
-				+ "WHERE CustomerId = "+customer.getId()+" and PaymentDate < "+fromDate.getTime()+"";
+				+ "WHERE CustomerId = "+customer.getId()+" and PaymentDate <= "+toDate.getTime()+"";
 		System.out.println("query : "+queryStr);
 		EntityManager em = JPAFacade.getEntityManager();
 		Query query = em.createNativeQuery(queryStr);
